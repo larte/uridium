@@ -1,7 +1,10 @@
 #include "uridium.h"
-
+#define OS_UNIX 1
+#ifndef OS_UNIX
 #include <sdl.h>
-
+#else
+#include <SDL/SDL.h>
+#endif
 extern "C" VALUE uridium_init_impl()
 {
   if (SDL_Init(SDL_INIT_VIDEO) < 0)

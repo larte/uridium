@@ -1,9 +1,16 @@
 #include "uridium.h"
-
+#define OS_UNIX 1
+#ifndef OS_UNIX
+#include <windows.h>
 #include <sdl.h>
 #include <gl/gl.h>
 #include <gl/glu.h>
-#include <windows.h>
+#else
+#include <SDL/SDL.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glext.h>
+#endif
 
 extern "C" VALUE display_open_impl(VALUE self,
   VALUE name, VALUE width, VALUE height, VALUE fullscreen)
@@ -37,24 +44,32 @@ extern "C" VALUE display_open_impl(VALUE self,
 
 extern "C" VALUE display_sync_impl(VALUE self, VALUE interval)
 {
-  typedef bool (APIENTRY *PFNWGLSWAPINTERVALFARPROC)(int);
-  PFNWGLSWAPINTERVALFARPROC wglSwapIntervalEXT = 0;
-  const char *extensions =(const char *) glGetString(GL_EXTENSIONS);
-
-  if(strstr(extensions, "WGL_EXT_swap_control") == 0)
-  {
-    return 1;
-  }
-  else
-  {
-    wglSwapIntervalEXT = (PFNWGLSWAPINTERVALFARPROC)
+#ifndef OS_UNIX
+    typedef bool (APIENTRY *PFNWGLSWAPINTERVALFARPROC)(int);
+    PFNWGLSWAPINTERVALFARPROC wglSwapIntervalEXT = 0;
+    const char *extensions =(const char *) glGetString(GL_EXTENSIONS);
+    if(strstr(extensions, "WGL_EXT_swap_control") == 0)
+    {
+	return 1;
+    }
+    else
+    {
+      /*
+      wglSwapIntervalEXT = (PFNWGLSWAPINTERVALFARPROC)
       wglGetProcAddress("wglSwapIntervalEXT");
-
-    if(wglSwapIntervalEXT)
-      wglSwapIntervalEXT(NUM2INT(interval));
-
+      */
+      
+      wglSwapIntervalEXT = (PFNWGLSWAPINTERVALFARPROC)
+	  glGetProcAddress("wglSwapIntervalEXT");
+      
+      if(wglSwapIntervalEXT)
+	wglSwapIntervalEXT(NUM2INT(interval));
+    
     return 0;
-  }
+    }
+#else
+    return 1;
+#endif
 }      
 
 static VALUE rb_display;
