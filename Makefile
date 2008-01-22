@@ -34,7 +34,7 @@ localstatedir = $(DESTDIR)/var
 sitelibdir = $(sitedir)/$(ruby_version)
 libexecdir = $(exec_prefix)/libexec
 
-CC = gcc
+CC = g++
 LIBRUBY = $(LIBRUBY_SO)
 LIBRUBY_A = lib$(RUBY_SO_NAME)-static.a
 LIBRUBYARG_SHARED = -l$(RUBY_SO_NAME)
@@ -79,7 +79,7 @@ extout =
 extout_prefix = 
 target_prefix = 
 LOCAL_LIBS = 
-LIBS = $(LIBRUBYARG_SHARED)  -lpthread -ldl -lcrypt -lm   -lc
+LIBS = $(LIBRUBYARG_SHARED) -lSDLmain -lSDL -lGL -lGLU  -lpthread -ldl -lcrypt -lm   -lc
 SRCS = uridium.c display.c
 OBJS = uridium.o display.o
 TARGET = uridium
