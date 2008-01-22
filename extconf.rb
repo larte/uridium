@@ -8,11 +8,12 @@ if RUBY_PLATFORM =~ /linux/
   have_library("GL")
   have_library("SDL")
   have_library("SDLmain")
+else #win32
+  have_library("opengl32")
+  have_library("glu32")
+  have_library("sdl")
+  have_library("sdlmain")
 end
 
-#have_library("opengl32")
-#have_library("glu32")
-
-
-$objs = ["uridium.o", "display.o"]
+$objs = ["uridium.o", "display.o","gdi.o"]
 create_makefile("uridium")

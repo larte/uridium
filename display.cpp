@@ -11,6 +11,10 @@
 #include <GL/glext.h>
 #endif
 
+/*
+ *   call-seq:
+ *      open_impl(name, widht, height, fullscreen) 
+ */
 extern "C" VALUE display_open_impl(VALUE self,
   VALUE name, VALUE width, VALUE height, VALUE fullscreen)
 {
