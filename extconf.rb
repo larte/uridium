@@ -1,5 +1,7 @@
 require 'mkmf'
 
+CONFIG['CC'] = 'g++'
+ 
 #have_library("opengl32")
 #have_library("glu32")
 have_library("GLU")
