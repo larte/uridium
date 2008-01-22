@@ -41,7 +41,7 @@ LIBRUBYARG_SHARED = -l$(RUBY_SO_NAME)
 LIBRUBYARG_STATIC = -l$(RUBY_SO_NAME)-static
 
 RUBY_EXTCONF_H = 
-CFLAGS   =  -fPIC -Wall -g -fno-strict-aliasing -O2  -fPIC 
+CFLAGS   =  -fPIC -Wall -g -fno-strict-aliasing -O2  -fPIC -DOS_UNIX 
 INCFLAGS = -I. -I. -I/usr/lib/ruby/1.8/i486-linux -I.
 CPPFLAGS =  
 CXXFLAGS = $(CFLAGS) 

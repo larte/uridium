@@ -1,5 +1,4 @@
 #include "uridium.h"
-#define OS_UNIX 1
 #ifndef OS_UNIX
 #include <windows.h>
 #include <sdl.h>
@@ -54,10 +53,10 @@ extern "C" VALUE display_sync_impl(VALUE self, VALUE interval)
     }
     else
     {
-      /*
+
       wglSwapIntervalEXT = (PFNWGLSWAPINTERVALFARPROC)
       wglGetProcAddress("wglSwapIntervalEXT");
-      */
+
       
       wglSwapIntervalEXT = (PFNWGLSWAPINTERVALFARPROC)
 	  glGetProcAddress("wglSwapIntervalEXT");

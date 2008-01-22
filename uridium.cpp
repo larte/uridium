@@ -1,5 +1,4 @@
 #include "uridium.h"
-#define OS_UNIX 1
 #ifndef OS_UNIX
 #include <sdl.h>
 #else
