@@ -29,4 +29,5 @@ extern "C" void Init_uridium()
   rb_define_singleton_method(rb_uridium, "destroy", (ruby_method*) &uridium_destroy_impl, 0);
 
   init_display();
+  init_gdi();
 }

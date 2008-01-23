@@ -1,9 +1,9 @@
-#ifndef URIDIUM_H
-#define URIDIUM_H
+#ifndef URIDIUM_GDI_H
+#define URIDIUM_GDI_H
 
 #include "display.h"
 #include <ruby.h>
 
-typedef VALUE (ruby_method)(...);
+extern "C" void init_gdi();
 
 #endif

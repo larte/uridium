@@ -5,7 +5,7 @@
  * Created on 22.1.2008, 22:07:18
  *
  */
-
+#include "display.h"
 #include "gdi.h"
 #ifndef OS_UNIX
 #include <sdl.h>
@@ -68,7 +68,7 @@ extern "C" VALUE gdi_rotate_z_impl(VALUE val)
     
 static VALUE rb_gdi;
 
-extern "C" void Init_gdi()
+void init_gdi()
 {
   rb_gdi = rb_define_class("Gdi", rb_cObject);
   rb_define_singleton_method(rb_gdi, "initialize",
