@@ -41,7 +41,7 @@ LIBRUBYARG_SHARED = -Wl,-R -Wl,$(libdir) -L$(libdir) -L.
 LIBRUBYARG_STATIC = -l$(RUBY_SO_NAME)-static
 
 RUBY_EXTCONF_H = 
-CFLAGS   =  -fPIC -g -O2 -DOS_UNIX 
+CFLAGS   =  -fPIC -g -O2 -DOS_UNIX -I/usr/include/FTGL -I/usr/include/freetype2 -I/usr/local/include/FTGL -I/usr/local/include/freetype2 
 INCFLAGS = -I. -I. -I/usr/local/lib/ruby/1.8/i686-linux -I.
 CPPFLAGS =  
 CXXFLAGS = $(CFLAGS) 

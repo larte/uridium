@@ -3,6 +3,7 @@
 
 #include <ruby.h>
 
+typedef VALUE (ruby_method)(...);
 extern "C" void init_font();
 
 #endif
