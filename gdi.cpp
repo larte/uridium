@@ -14,7 +14,7 @@
 #include <SDL/SDL.h>
 #include <GL/gl.h>
 #endif
-extern "C" VALUE gdi_init_impl(VALUE display, VALUE self)
+extern "C" VALUE gdi_init_impl(VALUE self, VALUE display)
 {
     rb_iv_set(self,"@display",display);
     return self;
@@ -24,7 +24,7 @@ extern "C" VALUE gdi_init_impl(VALUE display, VALUE self)
  *   call-seq: scale() => #
  *
  */
-extern "C" VALUE gdi_scale_impl(VALUE val, VALUE self)
+extern "C" VALUE gdi_scale_impl(VALUE self, VALUE val)
 {
     double s = NUM2DBL(val);
     glScalef(s, s, s);
@@ -65,7 +65,8 @@ extern "C" VALUE gdi_rotate_z_impl(VALUE val)
     glRotatef(a, 0, 0, 1);
     return Qnil;
 }
-    
+
+
 static VALUE rb_gdi;
 
 void init_gdi()

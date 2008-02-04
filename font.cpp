@@ -24,14 +24,14 @@ Last modified: Mon Feb  4 18:19:55 2008 lauri
 
 #endif
 
-VALUE font_initialize_impl(VALUE str, VALUE size, VALUE self)
+VALUE font_initialize_impl(VALUE self, VALUE str, VALUE size)
 {
     rb_iv_set(self,"@path", str);
     rb_iv_set(self,"@size", size);
+    Check_Type(str, T_STRING);
     char *path = RSTRING(str)->ptr;
-    printf("got font %s\n",path);
     FTGLTextureFont* font = new FTGLTextureFont(path);
-    font->FaceSize(INT2NUM(size));
+    font->FaceSize(NUM2INT(size));
     Data_Wrap_Struct(self, 0 ,free, font);
     return self;
 }

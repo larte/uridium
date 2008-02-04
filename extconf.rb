@@ -14,7 +14,8 @@ if RUBY_PLATFORM =~ /linux/ || RUBY_PLATFORM =~ /BSD/
   c_libs << "freetype"
   c_libs << "ftgl"
 
-  $CFLAGS += "-I/usr/include/FTGL -I/usr/include/freetype2 -I/usr/local/include/FTGL -I/usr/local/include/freetype2"
+  $CFLAGS += "-I/usr/include/FTGL -I/usr/include/freetype2 "
+  $CFLAGS += "-I/usr/local/include/FTGL -I/usr/local/include/freetype2"
   
 else #win32
   c_libs << "opengl32"
@@ -23,8 +24,22 @@ else #win32
   c_libs << "sdlmain"
 end
 
+missing = [];
+c_libs.each{ |lib| 
+  if !have_library(lib)
+    missing << lib
+  end
+}
 
-c_libs.each{|lib| have_library(lib) }
+
+if !missing.empty?
+puts "Missing dependencies:"
+  missing.each do |lib|
+    puts "\t#{lib}"
+  end
+  puts "Exiting..."
+  exit;
+end
 
 $objs = ["uridium.o", "display.o","gdi.o","font.o"]
 create_makefile("uridium")
