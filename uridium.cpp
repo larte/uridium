@@ -1,9 +1,6 @@
 #include "uridium.h"
-#ifndef OS_UNIX
-#include <sdl.h>
-#else
 #include <SDL/SDL.h>
-#endif
+
 extern "C" VALUE uridium_init_impl()
 {
   if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -30,5 +27,5 @@ extern "C" void Init_uridium()
 
   init_display();
   init_gdi();
-  init_font();
+  /*nit_font();*/
 }

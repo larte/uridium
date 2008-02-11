@@ -2,8 +2,11 @@ require 'uridium'
 
 Uridium.init
 display = Display.new("High Caliber", 320, 200, false, true)
-font = Font.new("fonts/base02.ttf", 72)
 display.open()
+puts display.size
+
+=begin
+font = Font.new("fonts/base02.ttf", 72)
 gdi = Gdi.initialize(display)
 
 puts gdi.methods
@@ -14,7 +17,7 @@ puts gdi.methods
   gdi.draw_text(font, "Halo thar")
   gdi.flip
 end
-
+=end
 sleep 5
 Uridium.destroy
 

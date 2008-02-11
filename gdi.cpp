@@ -7,13 +7,9 @@
  */
 #include "display.h"
 #include "gdi.h"
-#ifndef OS_UNIX
-#include <sdl.h>
-#include <gl/gl.h>
-#else
 #include <SDL/SDL.h>
 #include <GL/gl.h>
-#endif
+
 extern "C" VALUE gdi_init_impl(VALUE self, VALUE display)
 {
     rb_iv_set(self,"@display",display);
