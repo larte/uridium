@@ -12,7 +12,7 @@
 
 extern "C" VALUE gdi_init_impl(VALUE self, VALUE display)
 {
-    rb_iv_set(self,"@display",display);
+    rb_iv_set(self, "@display", display);
     return self;
 }
 
@@ -32,9 +32,17 @@ extern "C" VALUE gdi_scale_impl(VALUE self, VALUE val)
  *   call-seq: clear() => #
  *
  */
-extern "C" VALUE gdi_clear_impl()
+extern "C" VALUE gdi_clear_impl(int argc, VALUE* argv, VALUE self)
 {
-     glClearColor(0, 0, 0, 0);
+     VALUE rb_color;
+     unsigned int color = 0x00000000;
+     rb_scan_args(argc, argv, "01", &rb_color);
+     if (!NIL_P(color))
+     {
+       color = NUM2UINT(rb_color);
+     }
+     
+     glClearColor((color & 0x00ff0000) >> 16, (color & 0x0000ff00) >> 8, (color & 0x000000ff), (color & 0xff000000) >> 24);
      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
      return Qnil;
 }
@@ -68,10 +76,9 @@ static VALUE rb_gdi;
 void init_gdi()
 {
   rb_gdi = rb_define_class("Gdi", rb_cObject);
-  rb_define_singleton_method(rb_gdi, "initialize",
-			     (ruby_method*) &gdi_init_impl, 1);
+  rb_define_method(rb_gdi, "initialize", (ruby_method*) &gdi_init_impl, 1);
   rb_define_method(rb_gdi,"scale",(ruby_method*) &gdi_scale_impl, 1);
-  rb_define_method(rb_gdi,"clear",(ruby_method*) &gdi_clear_impl, 0);
+  rb_define_method(rb_gdi,"clear",(ruby_method*) &gdi_clear_impl, -1);
   rb_define_method(rb_gdi,"rotate_z",(ruby_method*) &gdi_rotate_z_impl, 1);
   rb_define_method(rb_gdi,"flip",(ruby_method*) &gdi_flip_impl, 0);
   

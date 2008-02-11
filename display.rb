@@ -17,7 +17,6 @@ class Display
   def open()
     open_impl(@name, @width, @height, @fullscreen ? 1 : 0)
     sync_impl(@sync ? 1 : 0)
-    puts "sdl_surface: #{@sdl_surface.inspect}"
   end
   
   def gdi

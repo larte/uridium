@@ -3,7 +3,17 @@ require 'uridium'
 Uridium.init
 display = Display.new("High Caliber", 320, 200, false, true)
 display.open()
-puts display.size
+puts "Display size: #{display.size.inspect}"
+
+puts "Doing some flashy things...Enjoy your epilepsy!"
+gdi = display.gdi
+100.times do |i|
+  gdi.clear(i % 2 == 0 ? 0x00000000 : 0xffffffff)
+  gdi.flip
+  sleep 0.1
+end
+
+Uridium.destroy
 
 =begin
 font = Font.new("fonts/base02.ttf", 72)
@@ -18,8 +28,6 @@ puts gdi.methods
   gdi.flip
 end
 =end
-sleep 5
-Uridium.destroy
 
 =begin
 require 'system'
