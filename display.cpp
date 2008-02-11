@@ -11,15 +11,21 @@
 #include <GL/glext.h>
 #endif
 
-/*
- *   call-seq:
- *      open_impl(name, widht, height, fullscreen) 
- */
+
+static VALUE display_alloc(VALUE self)
+{
+        SDL_Surface *s = (SDL_Surface *)malloc(sizeof(SDL_Surface));
+        VALUE obj;
+        obj = Data_Wrap_Struct(self, 0, free, s);
+        return obj;
+}
+
 extern "C" VALUE display_open_impl(VALUE self,
   VALUE name, VALUE width, VALUE height, VALUE fullscreen)
 {
   SDL_Surface *screen;
-
+  Data_Get_Struct(self, SDL_Surface, screen);
+  
   char* sdl_name = STR2CSTR(name);
   SDL_WM_SetCaption(sdl_name, sdl_name);
 
@@ -41,8 +47,7 @@ extern "C" VALUE display_open_impl(VALUE self,
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  rb_iv_set(self, "@sdl_surface", INT2NUM((unsigned int) screen));
-  return Qnil;
+  return self;
 }
 
 extern "C" VALUE display_sync_impl(VALUE self, VALUE interval)
@@ -75,11 +80,26 @@ extern "C" VALUE display_sync_impl(VALUE self, VALUE interval)
 #endif
 }      
 
+extern "C" VALUE display_size_impl(VALUE self)
+{
+        SDL_Surface *screen;
+        Data_Get_Struct(self, SDL_Surface, screen);
+        VALUE arr = rb_ary_new();
+        printf("widht : %d\n",screen->w);
+        rb_ary_push(arr, INT2NUM(screen->w));
+        rb_ary_push(arr, INT2NUM(screen->h));
+        return arr;
+}
+
 static VALUE rb_display;
 
 void init_display()
 {
   rb_display = rb_define_class("Display", rb_cObject);
-  rb_define_method(rb_display, "open_impl", (ruby_method*) &display_open_impl, 4);
-  rb_define_method(rb_display, "sync_impl", (ruby_method*) &display_sync_impl, 1);
+  rb_define_alloc_func(rb_display, display_alloc);
+  rb_define_method(rb_display, "initialize", (ruby_method*) &display_open_impl, 4);
+  rb_define_method(rb_display, "sync", (ruby_method*) &display_sync_impl, 1);
+
+  rb_define_method(rb_display, "size", (ruby_method*) &display_size_impl, 0);
+  
 }
