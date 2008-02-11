@@ -49,9 +49,8 @@ extern "C" VALUE display_open_impl(VALUE self,
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  Data_Wrap_Struct(rb_display, 0, 0, screen);
-  
-  return self;
+  return Data_Wrap_Struct(rb_display, 0, 0, screen);
+ 
 }
 
 extern "C" VALUE display_sync_impl(VALUE self, VALUE interval)
@@ -84,12 +83,11 @@ extern "C" VALUE display_sync_impl(VALUE self, VALUE interval)
 #endif
 }      
 
-extern "C" VALUE display_size_impl(VALUE self)
+extern "C" VALUE display_size_impl(VALUE obj)
 {
         SDL_Surface *screen;
-        Data_Get_Struct(rb_display, SDL_Surface, screen);
+        Data_Get_Struct(obj, SDL_Surface, screen);
         VALUE arr = rb_ary_new();
-        printf("widht : %d\n",screen->w);
         rb_ary_push(arr, INT2NUM(screen->w));
         rb_ary_push(arr, INT2NUM(screen->h));
         return arr;
