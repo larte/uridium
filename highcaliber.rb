@@ -7,16 +7,17 @@ display = Display.new("High Caliber", 320, 200, false, true)
 display.open()
 puts "Display size: #{display.size.inspect}"
 
+text = "Y Halo thar!"
 puts "Doing some flashy things...Enjoy your epilepsy!"
 gdi = display.gdi
 10.times do |i|
-  gdi.clear(i % 2 == 0 ? 0x00000000 : 0xffffffff)
+  gdi.clear(0x00000000)
   # TODO: create gdi.draw_text(font, text)
-  font.render("Halo thar")
+  font.render(text[0..i+2])
   gdi.flip
-  sleep 0.1
+  sleep 0.3
 end
-
+sleep 2
 Uridium.destroy
 
 =begin
