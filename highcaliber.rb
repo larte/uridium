@@ -1,14 +1,18 @@
 require 'uridium'
 
 Uridium.init
+font = Font.new("fonts/base02.ttf", 72)
+
 display = Display.new("High Caliber", 320, 200, false, true)
 display.open()
 puts "Display size: #{display.size.inspect}"
 
 puts "Doing some flashy things...Enjoy your epilepsy!"
 gdi = display.gdi
-100.times do |i|
+10.times do |i|
   gdi.clear(i % 2 == 0 ? 0x00000000 : 0xffffffff)
+  # TODO: create gdi.draw_text(font, text)
+  font.render("Halo thar")
   gdi.flip
   sleep 0.1
 end

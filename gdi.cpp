@@ -81,5 +81,4 @@ void init_gdi()
   rb_define_method(rb_gdi,"clear",(ruby_method*) &gdi_clear_impl, -1);
   rb_define_method(rb_gdi,"rotate_z",(ruby_method*) &gdi_rotate_z_impl, 1);
   rb_define_method(rb_gdi,"flip",(ruby_method*) &gdi_flip_impl, 0);
-  
 }

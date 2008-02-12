@@ -3,7 +3,7 @@
 
 #include "display.h"
 #include "gdi.h"
-/*#include "font.h"*/
+#include "font.h"
 #include <ruby.h>
 
 typedef VALUE (ruby_method)(...);

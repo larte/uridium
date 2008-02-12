@@ -8,11 +8,7 @@ Last modified: Mon Feb  4 18:19:55 2008 lauri
 */
 #include "display.h"
 #include "font.h"
-#ifndef OS_UNIX
-#include <gl/gl.h>
-#include <gl/glu.h>
-#include <FTGLTextureFont.h>
-#else
+
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <ft2build.h>
@@ -22,17 +18,17 @@ Last modified: Mon Feb  4 18:19:55 2008 lauri
 #include <FTGL/FTGLTextureFont.h>
 #include <FTGL/FTGLPixmapFont.h>
 
-#endif
+static VALUE rb_font;
 
 VALUE font_initialize_impl(VALUE self, VALUE str, VALUE size)
 {
     rb_iv_set(self,"@path", str);
     rb_iv_set(self,"@size", size);
     Check_Type(str, T_STRING);
-    char *path = RSTRING(str)->ptr;
+    char *path = RSTRING_PTR(str);
     FTGLTextureFont* font = new FTGLTextureFont(path);
     font->FaceSize(NUM2INT(size));
-    Data_Wrap_Struct(self, 0 ,free, font);
+    rb_iv_set(self, "@ftgl_font", Data_Wrap_Struct(rb_font, 0, 0, font));
     return self;
 }
 
@@ -41,13 +37,13 @@ VALUE font_initialize_impl(VALUE self, VALUE str, VALUE size)
  *
  */
 
-VALUE font_render_impl(VALUE text, VALUE self)
+VALUE font_render_impl(VALUE self, VALUE text)
 {
-    char *str = RSTRING(text)->ptr;
-
+    char *str = RSTRING_PTR(text);
     
     void *font;
-    Data_Get_Struct(self, FTGLTextureFont, font);
+    Data_Get_Struct(rb_iv_get(self, "@ftgl_font"), FTGLTextureFont, font);
+    
     glPushMatrix();
     glEnable(GL_TEXTURE_2D);
     glColor3f(1.0, 1.0, 1.0);
@@ -57,14 +53,9 @@ VALUE font_render_impl(VALUE text, VALUE self)
     return Qnil;
 }
 
-
-static VALUE rb_font;
-
 void init_font()
 {
   rb_font = rb_define_class("Font", rb_cObject);
-  rb_define_singleton_method(rb_font, "new",
-			     (ruby_method*) &font_initialize_impl, 2);
+  rb_define_method(rb_font, "initialize", (ruby_method*) &font_initialize_impl, 2);
   rb_define_method(rb_font,"render",(ruby_method*) &font_render_impl, 1);
-
 }
