@@ -10,12 +10,13 @@ puts "Display size: #{display.size.inspect}"
 text = "Y Halo thar!"
 puts "Doing some flashy things...Enjoy your epilepsy!"
 gdi = display.gdi
-10.times do |i|
+20.times do |i|
   gdi.clear(0x00000000)
   # TODO: create gdi.draw_text(font, text)
   font.render(text[0..i+2])
-  gdi.flip
-  sleep 0.3
+  gdi.rotate_z(2)
+  gdi.flip  
+  sleep 0.1
 end
 sleep 2
 Uridium.destroy

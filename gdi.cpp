@@ -52,7 +52,7 @@ extern "C" VALUE gdi_clear_impl(int argc, VALUE* argv, VALUE self)
  *   call-seq: flip() => #
  *
  */
-extern "C" VALUE gdi_flip_impl()
+extern "C" VALUE gdi_flip_impl(VALUE self)
 {
     SDL_GL_SwapBuffers();
     return Qnil;
@@ -63,7 +63,7 @@ extern "C" VALUE gdi_flip_impl()
  *       Rotate object around by <b>angle</b>.
  *
  */
-extern "C" VALUE gdi_rotate_z_impl(VALUE val)
+extern "C" VALUE gdi_rotate_z_impl(VALUE self, VALUE val)
 {
     int a = NUM2INT(val);
     glRotatef(a, 0, 0, 1);
