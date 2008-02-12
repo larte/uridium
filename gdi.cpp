@@ -70,7 +70,31 @@ extern "C" VALUE gdi_rotate_z_impl(VALUE self, VALUE val)
     return Qnil;
 }
 
+extern "C" VALUE gdi_draw_line(VALUE self, VALUE coord1, VALUE coord2, VALUE colour)
+{
+	
+	float x1 = NUM2DBL(rb_ary_pop(coord1));
+	float y1 = NUM2DBL(rb_ary_pop(coord1));
+	float x2 = NUM2DBL(rb_ary_pop(coord2));
+	float y2 = NUM2DBL(rb_ary_pop(coord2));
+	float red = NUM2DBL(rb_ary_pop(colour));
+	float green = NUM2DBL(rb_ary_pop(colour));
+	float blue = NUM2DBL(rb_ary_pop(colour));
 
+	SDL_GL_SetAttribute(SDL_GL_RED_SIZE,     1);
+	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE,   1);
+	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE,    1);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+	glColor3f(red, green, blue);
+
+	glBegin(GL_LINES);
+	glVertex2f(x1, y1);
+	glVertex2f(x2, y2);
+	glEnd();
+	
+	return Qnil;
+}
 static VALUE rb_gdi;
 
 void init_gdi()
@@ -81,4 +105,5 @@ void init_gdi()
   rb_define_method(rb_gdi,"clear",(ruby_method*) &gdi_clear_impl, -1);
   rb_define_method(rb_gdi,"rotate_z",(ruby_method*) &gdi_rotate_z_impl, 1);
   rb_define_method(rb_gdi,"flip",(ruby_method*) &gdi_flip_impl, 0);
+  rb_define_method(rb_gdi,"draw_line", (ruby_method*) &gdi_draw_line, 3);
 }
