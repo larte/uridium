@@ -1,4 +1,3 @@
-# Load ../ext/ and ../lib/.
 $LOAD_PATH << '../ext/'
 $LOAD_PATH << '../lib/'
 
@@ -7,7 +6,7 @@ require 'uridium'
 Uridium.init
 font = Font.new("fonts/base02.ttf", 72)
 
-display = Display.new("High Caliber", 320, 200, false, true)
+display = Display.new("High Caliber", 320, 200, false, false)
 display.open()
 puts "Display size: #{display.size.inspect}"
 
@@ -24,7 +23,7 @@ gdi = display.gdi
     font.render(text[0..i-20])
     gdi.rotate_z(5)
   end
-  gdi.flip  
+  gdi.flip
   sleep 0.1
 end
 sleep 0.5

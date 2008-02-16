@@ -42,7 +42,12 @@ extern "C" VALUE gdi_clear_impl(int argc, VALUE* argv, VALUE self)
        color = NUM2UINT(rb_color);
      }
      
-     glClearColor((color & 0x00ff0000) >> 16, (color & 0x0000ff00) >> 8, (color & 0x000000ff), (color & 0xff000000) >> 24);
+     glClearColor(
+        ((color & 0x00ff0000) >> 16) / 255.0f,
+        ((color & 0x0000ff00) >> 8) / 255.0f,
+        ((color & 0x000000ff)) / 255.0f,
+        ((color & 0xff000000) >> 24) / 255.0f
+     );
      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
      return Qnil;
 }
