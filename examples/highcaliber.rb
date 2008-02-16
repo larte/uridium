@@ -1,3 +1,7 @@
+# Load ../ext/ and ../lib/.
+$LOAD_PATH << '../ext/'
+$LOAD_PATH << '../lib/'
+
 require 'uridium'
 
 Uridium.init
@@ -25,40 +29,3 @@ gdi = display.gdi
 end
 sleep 0.5
 Uridium.destroy
-
-=begin
-font = Font.new("fonts/base02.ttf", 72)
-gdi = Gdi.initialize(display)
-
-puts gdi.methods
-
-100.times do
-  gdi.clear
-  gdi.rotate_z(0.1)
-  gdi.draw_text(font, "Halo thar")
-  gdi.flip
-end
-=end
-
-=begin
-require 'system'
-
-System.init
-
-display = Display.new("High Caliber", 640, 480, false, 1)
-font = Font.new("fonts/base02.ttf", 72)
-
-display.show()
-gdi = display.gdi()
-
-100.times do
-  gdi.clear()
-  gdi.rotate_z(0.1)
-  gdi.scale(1.005)
-  gdi.draw_text(font, "Hello World!")
-  gdi.flip()
-end
-
-sleep 1
-System.destroy
-=end
