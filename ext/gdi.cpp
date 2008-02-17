@@ -17,6 +17,12 @@ extern "C" VALUE gdi_init_impl(VALUE self, VALUE display)
     return self;
 }
 
+extern "C" VALUE gdi_trans0_impl(VALUE self)
+{
+    glLoadIdentity();
+    return Qnil;
+}
+
 /*
  *   call-seq: scale() => #
  *
@@ -27,7 +33,6 @@ extern "C" VALUE gdi_scale_impl(VALUE self, VALUE val)
     glScalef(s, s, s);
     return Qnil;
 }
-
 
 /*
  *   call-seq: clear() => #
@@ -52,7 +57,6 @@ extern "C" VALUE gdi_clear_impl(int argc, VALUE* argv, VALUE self)
      glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
      return Qnil;
 }
-
 
 /*
  *   call-seq: flip() => #
@@ -113,10 +117,11 @@ void init_gdi()
 {
   rb_gdi = rb_define_class("Gdi", rb_cObject);
   rb_define_method(rb_gdi, "initialize", (ruby_method*) &gdi_init_impl, 1);
-  rb_define_method(rb_gdi,"scale",(ruby_method*) &gdi_scale_impl, 1);
-  rb_define_method(rb_gdi,"clear",(ruby_method*) &gdi_clear_impl, -1);
-  rb_define_method(rb_gdi,"rotate_z",(ruby_method*) &gdi_rotate_z_impl, 1);
-  rb_define_method(rb_gdi,"flip",(ruby_method*) &gdi_flip_impl, 0);
-  rb_define_method(rb_gdi,"draw_line", (ruby_method*) &gdi_draw_line, 3);
-  rb_define_method(rb_gdi,"draw_text", (ruby_method*) &gdi_draw_text, 2);
+  rb_define_method(rb_gdi, "trans0", (ruby_method*) &gdi_trans0_impl, 0);
+  rb_define_method(rb_gdi, "scale",(ruby_method*) &gdi_scale_impl, 1);
+  rb_define_method(rb_gdi, "clear",(ruby_method*) &gdi_clear_impl, -1);
+  rb_define_method(rb_gdi, "rotate_z",(ruby_method*) &gdi_rotate_z_impl, 1);
+  rb_define_method(rb_gdi, "flip",(ruby_method*) &gdi_flip_impl, 0);
+  rb_define_method(rb_gdi, "draw_line", (ruby_method*) &gdi_draw_line, 3);
+  rb_define_method(rb_gdi, "draw_text", (ruby_method*) &gdi_draw_text, 2);
 }
