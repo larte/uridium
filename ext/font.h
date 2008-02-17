@@ -5,6 +5,8 @@
 
 typedef VALUE (ruby_method)(...);
 
+VALUE font_render_impl(VALUE self, VALUE text);
+
 extern "C" void init_font();
 
 #endif

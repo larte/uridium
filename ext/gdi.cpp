@@ -7,6 +7,7 @@
  */
 #include "display.h"
 #include "gdi.h"
+#include "font.h"
 #include <SDL/SDL.h>
 #include <GL/gl.h>
 
@@ -37,7 +38,7 @@ extern "C" VALUE gdi_clear_impl(int argc, VALUE* argv, VALUE self)
      VALUE rb_color;
      unsigned int color = 0x00000000;
      rb_scan_args(argc, argv, "01", &rb_color);
-     if (!NIL_P(color))
+     if (!NIL_P(rb_color))
      {
        color = NUM2UINT(rb_color);
      }
@@ -77,7 +78,6 @@ extern "C" VALUE gdi_rotate_z_impl(VALUE self, VALUE val)
 
 extern "C" VALUE gdi_draw_line(VALUE self, VALUE coord1, VALUE coord2, VALUE colour)
 {
-	
 	float x1 = NUM2DBL(rb_ary_pop(coord1));
 	float y1 = NUM2DBL(rb_ary_pop(coord1));
 	float x2 = NUM2DBL(rb_ary_pop(coord2));
@@ -100,6 +100,13 @@ extern "C" VALUE gdi_draw_line(VALUE self, VALUE coord1, VALUE coord2, VALUE col
 	
 	return Qnil;
 }
+
+extern "C" VALUE gdi_draw_text(VALUE self, VALUE font, VALUE text)
+{
+    font_render_impl(font, text);
+    return Qnil;
+}
+
 static VALUE rb_gdi;
 
 void init_gdi()
@@ -111,4 +118,5 @@ void init_gdi()
   rb_define_method(rb_gdi,"rotate_z",(ruby_method*) &gdi_rotate_z_impl, 1);
   rb_define_method(rb_gdi,"flip",(ruby_method*) &gdi_flip_impl, 0);
   rb_define_method(rb_gdi,"draw_line", (ruby_method*) &gdi_draw_line, 3);
+  rb_define_method(rb_gdi,"draw_text", (ruby_method*) &gdi_draw_text, 2);
 }

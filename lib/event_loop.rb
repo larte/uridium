@@ -12,7 +12,6 @@ class EventLoop
     accumulator = 0.0
     current_time = Time.now.to_f
     
-    # TODO: end conditions
     while true
       # Accumulate time.
       new_time = Time.now.to_f
@@ -22,7 +21,10 @@ class EventLoop
       
       # While accumulated time left, step simulation with fixed dt.
       while accumulator >= @dt
-        @sim.call(t, @dt)
+        continue = @sim.call(t, @dt)
+        return unless continue
+
+        # Step in time.
         t += @dt
         accumulator -= @dt
       end
