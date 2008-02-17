@@ -4,9 +4,13 @@ $LOAD_PATH << '../lib/'
 require 'uridium'
 require 'event_loop'
 
-# Open a display.
+# Init.
 Uridium.init
+
+# Load a font.
 font = Font.new("fonts/goodtimes.ttf", 60)
+
+# Open a display.
 display = Display.new("Event Loop", 640, 480, false, true)
 display.open()
 gdi = display.gdi
