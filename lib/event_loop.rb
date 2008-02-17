@@ -1,9 +1,10 @@
 class EventLoop
 
-  def initialize(dt, sim, renderer)
+  def initialize(dt, sim, renderer, idle_time = 0.001)
     @dt = dt
     @sim = sim
     @renderer = renderer
+    @idle_time = idle_time
   end
   
   def run
@@ -28,10 +29,10 @@ class EventLoop
       
       # Render the simulation state.
       @renderer.call(@sim)
-      
-      # TODO: slow the system down by sleeping a little, otherwise
-      # the CPU will be burned 100% if the used display isn't synced.
-    end  
+
+      # Sleep for idle time.
+      sleep(@idle_time)
+    end
   end
   
 end
