@@ -19,12 +19,13 @@ frames = 0
 sim = lambda {|t, dt|
   # Update color with random value.
   text.succ!
-  return (frames += 1) < 50
+  return (frames += 1) < 100
 }
 
 # Renderer.
 renderer = lambda {|sim|
   gdi.clear
+  gdi.rotate_z(0.1)
   gdi.scale(1.002)
   gdi.draw_text(font, text)
   gdi.flip

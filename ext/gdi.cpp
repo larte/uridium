@@ -71,7 +71,7 @@ extern "C" VALUE gdi_flip_impl(VALUE self)
  */
 extern "C" VALUE gdi_rotate_z_impl(VALUE self, VALUE val)
 {
-    int a = NUM2INT(val);
+    float a = NUM2DBL(val);
     glRotatef(a, 0, 0, 1);
     return Qnil;
 }
