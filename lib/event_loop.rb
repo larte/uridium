@@ -21,6 +21,9 @@ class EventLoop
       
       # While accumulated time left, step simulation with fixed dt.
       while accumulator >= @dt
+        # Poll events.
+        puts Event.poll.inspect
+        
         continue = @sim.call(t, @dt)
         return unless continue
 

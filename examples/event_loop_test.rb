@@ -54,7 +54,7 @@ renderer = lambda {|sim|
 
 # Create an event loop with sim dt=0.05s
 # (the "simulation" is updated once every 1/20th second)
-EventLoop.new(0.05, sim, renderer).run
+EventLoop.new(0.5, sim, renderer).run
 
 # Clean up
 Uridium.destroy

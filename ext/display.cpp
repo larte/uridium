@@ -68,15 +68,13 @@ extern "C" VALUE display_sync_impl(VALUE self, VALUE interval)
 /* TODO: return these from the Ruby side, as the info is stored there. */
 extern "C" VALUE display_size_impl(VALUE obj)
 {
-        SDL_Surface *screen;
-        Data_Get_Struct(rb_iv_get(obj, "@sdl_surface"), SDL_Surface, screen);
-        VALUE arr = rb_ary_new();
-        rb_ary_push(arr, INT2NUM(screen->w));
-        rb_ary_push(arr, INT2NUM(screen->h));
-        return arr;
+  SDL_Surface *screen;
+  Data_Get_Struct(rb_iv_get(obj, "@sdl_surface"), SDL_Surface, screen);
+  VALUE arr = rb_ary_new();
+  rb_ary_push(arr, INT2NUM(screen->w));
+  rb_ary_push(arr, INT2NUM(screen->h));
+  return arr;
 }
-
-
 
 void init_display()
 {

@@ -26,4 +26,5 @@ extern "C" void Init_uridium()
   init_display();
   init_gdi();
   init_font();
+  init_event();
 }
