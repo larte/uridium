@@ -8,15 +8,7 @@
 #include <GL/glu.h>
 #include <GL/glext.h>
 
-/*
-static VALUE display_alloc(VALUE self)
-{
-        SDL_Surface *s = (SDL_Surface *)malloc(sizeof(SDL_Surface));
-        VALUE obj;
-        obj = Data_Wrap_Struct(self, 0, free, s);
-        return obj;
-}
-*/
+
 extern "C" VALUE display_open_impl(VALUE self,
   VALUE name, VALUE width, VALUE height, VALUE fullscreen)
 {
