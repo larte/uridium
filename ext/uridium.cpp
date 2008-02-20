@@ -17,8 +17,6 @@ extern "C" VALUE uridium_destroy_impl()
   return 0;
 }
 
-static VALUE rb_uridium;
-
 extern "C" void Init_uridium()
 {
   rb_uridium = rb_define_class("Uridium", rb_cObject);

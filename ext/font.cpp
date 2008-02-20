@@ -18,8 +18,6 @@ Last modified: Mon Feb  4 18:19:55 2008 lauri
 #include <FTGL/FTGLTextureFont.h>
 #include <FTGL/FTGLPixmapFont.h>
 
-static VALUE rb_font;
-
 VALUE font_initialize_impl(VALUE self, VALUE str, VALUE size)
 {
     rb_iv_set(self,"@path", str);

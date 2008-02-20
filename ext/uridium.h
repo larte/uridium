@@ -8,6 +8,12 @@
 
 typedef VALUE (ruby_method)(...);
 
+// Modules
+static VALUE rb_uridium;
+static VALUE rb_display;
+static VALUE rb_gdi;
+static VALUE rb_font;
+
 // methods for ruby < 1.8.6 
 #ifndef RSTRING_LEN
 #define RSTRING_LEN(x) RSTRING(x)->len

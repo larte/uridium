@@ -8,8 +8,6 @@
 #include <GL/glu.h>
 #include <GL/glext.h>
 
-static VALUE rb_display;
-
 /*
 static VALUE display_alloc(VALUE self)
 {

@@ -111,8 +111,6 @@ extern "C" VALUE gdi_draw_text(VALUE self, VALUE font, VALUE text)
     return Qnil;
 }
 
-static VALUE rb_gdi;
-
 void init_gdi()
 {
   rb_gdi = rb_define_class("Gdi", rb_cObject);
