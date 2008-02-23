@@ -46,5 +46,4 @@ puts "Missing dependencies:"
   exit;
 end
 
-#$objs = ["uridium.o", "display.o","gdi.o", "font.o", "event.o"]
 create_makefile("uridium")
