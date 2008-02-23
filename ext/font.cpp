@@ -1,11 +1,3 @@
-/* -*- c++ -*-
-
-font.cpp
-
-Created: Mon Feb  4 18:19:55 2008 lauri
-Last modified: Mon Feb  4 18:19:55 2008 lauri
-
-*/
 #include "uridium.h"
 
 #include <GL/gl.h>
