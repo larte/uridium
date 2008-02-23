@@ -2,11 +2,10 @@
 
 #include <SDL/SDL.h>
 
-static VALUE rb_event;
-static VALUE rb_key_event;
-
 extern "C"
 {
+static VALUE rb_event;
+static VALUE rb_key_event;
 
 VALUE event_poll_impl()
 {

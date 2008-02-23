@@ -11,7 +11,6 @@
 
 extern "C"
 {
-
 static VALUE rb_font;
 
 VALUE font_initialize_impl(VALUE self, VALUE str, VALUE size)

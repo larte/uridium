@@ -3,6 +3,7 @@
 
 extern "C"
 {
+static VALUE rb_uridium;
 
 VALUE uridium_init_impl()
 {
@@ -26,7 +27,6 @@ void init_gdi();
 void init_font();
 void init_event();
 
-static VALUE rb_uridium;
 void Init_uridium()
 {
   rb_uridium = rb_define_class("Uridium", rb_cObject);

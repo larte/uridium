@@ -10,7 +10,6 @@
 
 extern "C"
 {
-
 static VALUE rb_display;
 
 VALUE display_open_impl(VALUE self,

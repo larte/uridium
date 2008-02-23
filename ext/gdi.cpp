@@ -11,7 +11,6 @@
 
 extern "C"
 {
-
 static VALUE rb_gdi;
 
 /* Forward declarations. */
