@@ -2,6 +2,8 @@
 
 #include <SDL/SDL.h>
 
+static VALUE rb_event;
+static VALUE rb_key_event;
 
 extern "C"
 {
@@ -51,8 +53,6 @@ VALUE key_event_init_impl(VALUE self, VALUE state, VALUE symbol)
   return self;
 }
 
-} // extern
-
 void init_event()
 {
   rb_event = rb_define_class("Event", rb_cObject);
@@ -66,3 +66,5 @@ void init_event()
   rb_define_singleton_method(rb_event, "poll_all",
     (ruby_method*) &event_poll_all_impl, 0);
 }
+
+} // extern

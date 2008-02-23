@@ -5,19 +5,25 @@
  * Created on 22.1.2008, 22:07:18
  *
  */
-#include "display.h"
-#include "gdi.h"
-#include "font.h"
+#include "uridium.h"
 #include <SDL/SDL.h>
 #include <GL/gl.h>
 
-extern "C" VALUE gdi_init_impl(VALUE self, VALUE display)
+extern "C"
+{
+
+static VALUE rb_gdi;
+
+/* Forward declarations. */
+VALUE font_render_impl(VALUE self, VALUE text);
+
+VALUE gdi_init_impl(VALUE self, VALUE display)
 {
     rb_iv_set(self, "@display", display);
     return self;
 }
 
-extern "C" VALUE gdi_trans0_impl(VALUE self)
+VALUE gdi_trans0_impl(VALUE self)
 {
     glLoadIdentity();
     return Qnil;
@@ -27,7 +33,7 @@ extern "C" VALUE gdi_trans0_impl(VALUE self)
  *   call-seq: scale() => #
  *
  */
-extern "C" VALUE gdi_scale_impl(VALUE self, VALUE val)
+VALUE gdi_scale_impl(VALUE self, VALUE val)
 {
     double s = NUM2DBL(val);
     glScalef(s, s, s);
@@ -38,7 +44,7 @@ extern "C" VALUE gdi_scale_impl(VALUE self, VALUE val)
  *   call-seq: clear() => #
  *
  */
-extern "C" VALUE gdi_clear_impl(int argc, VALUE* argv, VALUE self)
+VALUE gdi_clear_impl(int argc, VALUE* argv, VALUE self)
 {
      VALUE rb_color;
      unsigned int color = 0x00000000;
@@ -62,7 +68,7 @@ extern "C" VALUE gdi_clear_impl(int argc, VALUE* argv, VALUE self)
  *   call-seq: flip() => #
  *
  */
-extern "C" VALUE gdi_flip_impl(VALUE self)
+VALUE gdi_flip_impl(VALUE self)
 {
     SDL_GL_SwapBuffers();
     return Qnil;
@@ -73,14 +79,14 @@ extern "C" VALUE gdi_flip_impl(VALUE self)
  *       Rotate object around by <b>angle</b>.
  *
  */
-extern "C" VALUE gdi_rotate_z_impl(VALUE self, VALUE val)
+VALUE gdi_rotate_z_impl(VALUE self, VALUE val)
 {
     float a = NUM2DBL(val);
     glRotatef(a, 0, 0, 1);
     return Qnil;
 }
 
-extern "C" VALUE gdi_draw_line(VALUE self, VALUE coord1, VALUE coord2, VALUE colour)
+VALUE gdi_draw_line(VALUE self, VALUE coord1, VALUE coord2, VALUE colour)
 {
 	float x1 = NUM2DBL(rb_ary_pop(coord1));
 	float y1 = NUM2DBL(rb_ary_pop(coord1));
@@ -105,7 +111,7 @@ extern "C" VALUE gdi_draw_line(VALUE self, VALUE coord1, VALUE coord2, VALUE col
 	return Qnil;
 }
 
-extern "C" VALUE gdi_draw_text(VALUE self, VALUE font, VALUE text)
+VALUE gdi_draw_text(VALUE self, VALUE font, VALUE text)
 {
     font_render_impl(font, text);
     return Qnil;
@@ -123,3 +129,5 @@ void init_gdi()
   rb_define_method(rb_gdi, "draw_line", (ruby_method*) &gdi_draw_line, 3);
   rb_define_method(rb_gdi, "draw_text", (ruby_method*) &gdi_draw_text, 2);
 }
+
+} // extern

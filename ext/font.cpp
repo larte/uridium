@@ -6,8 +6,7 @@ Created: Mon Feb  4 18:19:55 2008 lauri
 Last modified: Mon Feb  4 18:19:55 2008 lauri
 
 */
-#include "display.h"
-#include "font.h"
+#include "uridium.h"
 
 #include <GL/gl.h>
 #include <GL/glu.h>
@@ -17,6 +16,11 @@ Last modified: Mon Feb  4 18:19:55 2008 lauri
 #include <FTGL/FTGLBitmapFont.h>
 #include <FTGL/FTGLTextureFont.h>
 #include <FTGL/FTGLPixmapFont.h>
+
+extern "C"
+{
+
+static VALUE rb_font;
 
 VALUE font_initialize_impl(VALUE self, VALUE str, VALUE size)
 {
@@ -57,3 +61,5 @@ void init_font()
   rb_define_method(rb_font, "initialize", (ruby_method*) &font_initialize_impl, 2);
   rb_define_method(rb_font,"render",(ruby_method*) &font_render_impl, 1);
 }
+
+} // extern

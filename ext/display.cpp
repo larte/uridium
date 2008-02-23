@@ -8,8 +8,12 @@
 #include <GL/glu.h>
 #include <GL/glext.h>
 
+extern "C"
+{
 
-extern "C" VALUE display_open_impl(VALUE self,
+static VALUE rb_display;
+
+VALUE display_open_impl(VALUE self,
   VALUE name, VALUE width, VALUE height, VALUE fullscreen)
 {
   SDL_Surface *screen;
@@ -39,7 +43,7 @@ extern "C" VALUE display_open_impl(VALUE self,
   rb_iv_set(self, "@sdl_surface", Data_Wrap_Struct(rb_display, 0, 0, screen));
 }
 
-extern "C" VALUE display_sync_impl(VALUE self, VALUE interval)
+VALUE display_sync_impl(VALUE self, VALUE interval)
 {
 #ifndef OS_UNIX
     typedef bool (APIENTRY *PFNWGLSWAPINTERVALFARPROC)(int);
@@ -66,7 +70,7 @@ extern "C" VALUE display_sync_impl(VALUE self, VALUE interval)
 }      
 
 /* TODO: return these from the Ruby side, as the info is stored there. */
-extern "C" VALUE display_size_impl(VALUE obj)
+VALUE display_size_impl(VALUE obj)
 {
   SDL_Surface *screen;
   Data_Get_Struct(rb_iv_get(obj, "@sdl_surface"), SDL_Surface, screen);
@@ -83,3 +87,5 @@ void init_display()
   rb_define_method(rb_display, "sync_impl", (ruby_method*) &display_sync_impl, 1);
   rb_define_method(rb_display, "size", (ruby_method*) &display_size_impl, 0);
 }
+
+} // extern

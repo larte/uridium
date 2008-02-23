@@ -1,7 +1,10 @@
 #include "uridium.h"
 #include <SDL/SDL.h>
 
-extern "C" VALUE uridium_init_impl()
+extern "C"
+{
+
+VALUE uridium_init_impl()
 {
   if (SDL_Init(SDL_INIT_VIDEO) < 0)
   {
@@ -11,13 +14,20 @@ extern "C" VALUE uridium_init_impl()
   return 0;
 }
 
-extern "C" VALUE uridium_destroy_impl()
+VALUE uridium_destroy_impl()
 {
   SDL_Quit();
   return 0;
 }
 
-extern "C" void Init_uridium()
+/* Module forward declarations. */
+void init_display();
+void init_gdi();
+void init_font();
+void init_event();
+
+static VALUE rb_uridium;
+void Init_uridium()
 {
   rb_uridium = rb_define_class("Uridium", rb_cObject);
   rb_define_singleton_method(rb_uridium, "init", (ruby_method*) &uridium_init_impl, 0);
@@ -28,3 +38,5 @@ extern "C" void Init_uridium()
   init_font();
   init_event();
 }
+
+} // extern
