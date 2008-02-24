@@ -23,8 +23,9 @@ elsif RUBY_PLATFORM =~ /mingw32/
   CONFIG['LDSHARED'] = 'g++ -shared -s'
   c_libs << "opengl32"
   c_libs << "glu32"
+  c_libs << "SDL"
   c_libs << "SDLmain"
-  c_libs << "SDL"  
+  c_libs << "SDL_mixer"
   c_libs << "freetype"
   c_libs << "ftgl"
 
