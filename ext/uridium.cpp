@@ -26,7 +26,8 @@ void init_display();
 void init_gdi();
 void init_font();
 void init_event();
-
+void init_mixer();
+	
 void Init_uridium()
 {
   rb_uridium = rb_define_class("Uridium", rb_cObject);
@@ -37,6 +38,7 @@ void Init_uridium()
   init_gdi();
   init_font();
   init_event();
+  init_mixer();
 }
 
 } // extern
