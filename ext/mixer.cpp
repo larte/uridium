@@ -33,13 +33,10 @@ VALUE init_mixer_impl(VALUE self, VALUE freq, VALUE format,
 	
 void init_mixer()
 {
-
-  rb_mixer = rb_define_class("Mixer", rb_mixer);
+  rb_mixer = rb_define_class("Mixer", rb_cObject);
 	
   rb_define_method(rb_mixer, "initialize",
     (ruby_method*) &init_mixer_impl, 4);
-
-	
 }
 
 
