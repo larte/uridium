@@ -20,7 +20,7 @@ class Logo
   attr_accessor :text, :rotation, :scale
   
   def initialize
-    @text = ''
+    @text = 'Type here: '
     @rotation = 0
     @scale = 1.0
   end
@@ -31,7 +31,7 @@ logo = Logo.new
 # Simulation.
 sim = lambda {|t, dt|
   # Update logo attributes.
-  logo.text = "Uridium (t: #{sprintf("%1.1f", t)}s, dt: #{sprintf("%1.2f", dt)}s)"
+  #logo.text = "Uridium (t: #{sprintf("%1.1f", t)}s, dt: #{sprintf("%1.2f", dt)}s)"
   logo.rotation += dt * 2
   logo.scale += dt * 0.1
   return t < 10
@@ -52,9 +52,27 @@ renderer = lambda {|sim|
   gdi.flip
 }
 
+activation_handler = lambda {|event|
+  puts "Handling activity #{event.inspect}"
+}
+
+key_handler = lambda {|event|
+  puts "Handling generic key #{event.inspect}"
+  logo.text << event.symbol.chr if event.pressed
+}
+
+esc_handler = lambda {|event|
+  puts "Handling Esc #{event.inspect}"
+  exit
+}
+
 # Create an event loop with sim dt=0.05s
 # (the "simulation" is updated once every 1/20th second)
-EventLoop.new(0.5, sim, renderer).run
+EventLoop.new(0.1, sim, renderer,
+  {
+    :key => {27 => esc_handler, nil => key_handler},
+    :activation => activation_handler
+  }).run
 
 # Clean up
 Uridium.destroy

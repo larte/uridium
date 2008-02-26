@@ -1,10 +1,36 @@
 class EventLoop
 
-  def initialize(dt, sim, renderer, idle_time = 0.001)
+  def initialize(dt, sim, renderer, event_handlers = {}, idle_time = 0.001)
     @dt = dt
     @sim = sim
     @renderer = renderer
     @idle_time = idle_time
+    @event_handlers = event_handlers
+    @event_mask = event_mask(event_handlers)
+  end
+  
+  def event_mask(event_handlers)
+    mask = 0
+    mask |= Event::TYPE_KEY if event_handlers[:key]
+    mask |= Event::TYPE_ACTIVATION if event_handlers[:activation]
+    return mask
+  end
+  
+  def dispatch_event(event)
+    case event
+      when ActivationEvent
+        @event_handlers[:activation].call(event)
+      when KeyEvent
+        handler = @event_handlers[:key]
+        if handler.is_a?(Proc)  
+          handler.call(event) 
+        else
+          handler = handler[event.symbol] || handler[nil]
+          handler.call(event)
+        end
+      else
+        raise "Unsupported event type: #{event.class.name}"
+    end
   end
   
   def run
@@ -21,8 +47,9 @@ class EventLoop
       
       # While accumulated time left, step simulation with fixed dt.
       while accumulator >= @dt
-        # Poll events.
-        puts Event.poll_all.inspect
+        # Poll and dispatch events.
+        events = Event.poll_all(@event_mask)
+        events.each {|event| dispatch_event(event)}
         
         continue = @sim.call(t, @dt)
         return unless continue
