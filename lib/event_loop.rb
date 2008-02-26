@@ -48,8 +48,10 @@ class EventLoop
       # While accumulated time left, step simulation with fixed dt.
       while accumulator >= @dt
         # Poll and dispatch events.
-        events = Event.poll_all(@event_mask)
-        events.each {|event| dispatch_event(event)}
+        if @event_mask != 0
+          events = Event.poll_all(@event_mask)
+          events.each {|event| dispatch_event(event)}
+        end
         
         continue = @sim.call(t, @dt)
         return unless continue
