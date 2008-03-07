@@ -116,6 +116,29 @@ VALUE gdi_draw_line(VALUE self, VALUE coord1, VALUE coord2, VALUE colour)
 	return Qnil;
 }
 
+
+/*
+ * call-seq: draw_polygon(Array coordinates)
+ */
+VALUE gdi_draw_polygon_2d(VALUE self, VALUE vertices)
+{
+    glColor3f(1, 1, 1);
+    glBegin( GL_POLYGON );
+    for(int i = 0; i < RARRAY(vertices)->len; i += 2)
+    {
+	    glVertex3f(
+		    NUM2DBL(rb_ary_entry(vertices, i)),
+		    NUM2DBL(rb_ary_entry(vertices, i + 1)),
+		    0.0f
+		    );
+    }
+
+    glEnd();
+
+    return Qnil;
+}
+	
+
 VALUE gdi_draw_polyline_2d(VALUE self, VALUE vertices)
 {
   glColor3f(1, 1, 1);
@@ -152,6 +175,7 @@ VALUE gdi_draw_points_2d(VALUE self, VALUE vertices)
   return Qnil;
 }
 
+
 VALUE gdi_draw_text(VALUE self, VALUE font, VALUE text)
 {
     font_render_impl(font, text);
@@ -169,8 +193,12 @@ void init_gdi()
   rb_define_method(rb_gdi, "rotate_z",(ruby_method*) &gdi_rotate_z_impl, 1);
   rb_define_method(rb_gdi, "flip",(ruby_method*) &gdi_flip_impl, 0);
   rb_define_method(rb_gdi, "draw_line", (ruby_method*) &gdi_draw_line, 3);
+
+    rb_define_method(rb_gdi, "draw_polygon_2d", (ruby_method*) &gdi_draw_polygon_2d, 1);
+
   rb_define_method(rb_gdi, "draw_polyline_2d", (ruby_method*) &gdi_draw_polyline_2d, 1);
   rb_define_method(rb_gdi, "draw_points_2d", (ruby_method*) &gdi_draw_points_2d, 1);
+
   rb_define_method(rb_gdi, "draw_text", (ruby_method*) &gdi_draw_text, 2);
 }
 
