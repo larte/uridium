@@ -13,15 +13,19 @@ extern "C"
 static VALUE rb_display;
 
 VALUE display_open_impl(VALUE self,
-  VALUE name, VALUE width, VALUE height, VALUE fullscreen)
+  VALUE rb_name, VALUE rb_width, VALUE rb_height, VALUE rb_fullscreen)
 {
   SDL_Surface *screen;
+  int width = NUM2INT(rb_width);
+  int height = NUM2INT(rb_height);
   
-  char* sdl_name = STR2CSTR(name);
+  char* sdl_name = STR2CSTR(rb_name);
   SDL_WM_SetCaption(sdl_name, sdl_name);
 
-  screen = SDL_SetVideoMode(NUM2INT(width), NUM2INT(height), 32,
-    (NUM2INT(fullscreen) ? SDL_FULLSCREEN : 0) | SDL_OPENGL | SDL_DOUBLEBUF);
+  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+  screen = SDL_SetVideoMode(width, height, 32,
+    (NUM2INT(rb_fullscreen) ? SDL_FULLSCREEN : 0) | SDL_OPENGL | SDL_DOUBLEBUF);
 
   if (screen == NULL)
   {
@@ -32,11 +36,13 @@ VALUE display_open_impl(VALUE self,
   // Setup projection matrix
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  gluOrtho2D(0, width, 0, height);
+  glOrtho(0, width, height, 0, -1, 1);
 
   // Setup model view matrix
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
+
+  glDisable(GL_DEPTH);
 
   // Store the screen (SDL_Surface) to an instance variable of Display.
   rb_iv_set(self, "@sdl_surface", Data_Wrap_Struct(rb_display, 0, 0, screen));

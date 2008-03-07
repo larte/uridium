@@ -1,6 +1,6 @@
 class EventLoop
 
-  def initialize(dt, sim, renderer, event_handlers = {}, idle_time = 0.001)
+  def initialize(dt, sim, renderer, event_handlers = {}, idle_time = 0.01)
     @dt = dt
     @sim = sim
     @renderer = renderer
@@ -26,7 +26,7 @@ class EventLoop
           handler.call(event) 
         else
           handler = handler[event.symbol] || handler[nil]
-          handler.call(event)
+          handler.call(event) if handler
         end
       else
         raise "Unsupported event type: #{event.class.name}"
@@ -53,8 +53,7 @@ class EventLoop
           events.each {|event| dispatch_event(event)}
         end
         
-        continue = @sim.call(t, @dt)
-        return unless continue
+        return unless @sim.call(t, @dt)
 
         # Step in time.
         t += @dt

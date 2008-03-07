@@ -28,6 +28,12 @@ VALUE gdi_trans0_impl(VALUE self)
     return Qnil;
 }
 
+VALUE gdi_translate_impl(VALUE self, VALUE tx, VALUE ty)
+{
+    glTranslatef(NUM2DBL(tx), NUM2DBL(ty), 0);
+    return Qnil;
+}
+
 /*
  *   call-seq: scale() => #
  *
@@ -110,6 +116,42 @@ VALUE gdi_draw_line(VALUE self, VALUE coord1, VALUE coord2, VALUE colour)
 	return Qnil;
 }
 
+VALUE gdi_draw_polyline_2d(VALUE self, VALUE vertices)
+{
+  glColor3f(1, 1, 1);
+
+  glBegin(GL_LINE_STRIP);
+  for(int i = 0; i < RARRAY(vertices)->len; i += 2)
+  {
+    glVertex2f(
+      NUM2DBL(rb_ary_entry(vertices, i)),
+      NUM2DBL(rb_ary_entry(vertices, i + 1))
+    );
+  }
+  glEnd();
+
+  return Qnil;
+}
+
+VALUE gdi_draw_points_2d(VALUE self, VALUE vertices)
+{
+  glPointSize(1.0);
+
+  glColor3f(1, 1, 1);
+
+  glBegin(GL_POINTS);
+  for(int i = 0; i < RARRAY(vertices)->len; i += 2)
+  {
+    glVertex2f(
+      NUM2DBL(rb_ary_entry(vertices, i)),
+      NUM2DBL(rb_ary_entry(vertices, i + 1))
+    );
+  }
+  glEnd();
+
+  return Qnil;
+}
+
 VALUE gdi_draw_text(VALUE self, VALUE font, VALUE text)
 {
     font_render_impl(font, text);
@@ -121,11 +163,14 @@ void init_gdi()
   rb_gdi = rb_define_class("Gdi", rb_cObject);
   rb_define_method(rb_gdi, "initialize", (ruby_method*) &gdi_init_impl, 1);
   rb_define_method(rb_gdi, "trans0", (ruby_method*) &gdi_trans0_impl, 0);
+  rb_define_method(rb_gdi, "translate", (ruby_method*) &gdi_translate_impl, 2);
   rb_define_method(rb_gdi, "scale",(ruby_method*) &gdi_scale_impl, 1);
   rb_define_method(rb_gdi, "clear",(ruby_method*) &gdi_clear_impl, -1);
   rb_define_method(rb_gdi, "rotate_z",(ruby_method*) &gdi_rotate_z_impl, 1);
   rb_define_method(rb_gdi, "flip",(ruby_method*) &gdi_flip_impl, 0);
   rb_define_method(rb_gdi, "draw_line", (ruby_method*) &gdi_draw_line, 3);
+  rb_define_method(rb_gdi, "draw_polyline_2d", (ruby_method*) &gdi_draw_polyline_2d, 1);
+  rb_define_method(rb_gdi, "draw_points_2d", (ruby_method*) &gdi_draw_points_2d, 1);
   rb_define_method(rb_gdi, "draw_text", (ruby_method*) &gdi_draw_text, 2);
 }
 

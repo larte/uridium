@@ -40,6 +40,7 @@ VALUE font_render_impl(VALUE self, VALUE text)
     glPushMatrix();
     glEnable(GL_TEXTURE_2D);
     glColor3f(1.0, 1.0, 1.0);
+    glScalef(1, -1, 1);
     ((FTFont*) font)->Render(str);
     glPopMatrix();
 
