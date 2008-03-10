@@ -3,6 +3,7 @@ $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../ext'))
 
 require 'uridium'
 require 'event_loop'
+require '../lib/uridium.rb'
 
 EVENT_LOOP_FPS = 100
 
@@ -87,7 +88,8 @@ class Ship
 end
 
 ship = Ship.new(*display.size.map {|d| d / 2})
-
+# samplerate, channels, buffer.
+mixer = Mixer.new(44100, 2, 1024)
 # Simulation.
 sim = lambda {|t, dt|
   ship.step(dt)
@@ -118,12 +120,16 @@ key_up = lambda {|event|
 }
 
 key_space = lambda {|event|
+  mixer.play_sound("laser.wav")
   ship.fire = event.pressed
 }
 
 key_other = lambda {|event|
   puts event.symbol
-  exit if event.symbol == 27
+  if event.symbol == 27
+     Uridium.destroy
+     exit
+  end  
 }
 
 # Run event loop.

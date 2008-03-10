@@ -13,6 +13,7 @@ if RUBY_PLATFORM =~ /linux/ || RUBY_PLATFORM =~ /BSD/
   c_libs << "SDL"
   c_libs << "SDLmain"
   c_libs << "freetype"
+  c_libs << "SDL_mixer"
   c_libs << "ftgl"
   headers << "SDL/SDL_mixer.h"
   $CFLAGS += "-I/usr/include/FTGL -I/usr/include/freetype2 "
