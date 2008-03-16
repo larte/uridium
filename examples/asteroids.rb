@@ -5,7 +5,8 @@ require 'uridium'
 require 'event_loop'
 require '../lib/uridium.rb'
 
-EVENT_LOOP_FPS = 100
+# Timestep, ms.
+DT = 10
 
 # Radians->degrees.
 class Numeric
@@ -42,21 +43,21 @@ class Ship
   end
 
   def step(dt)
-    @angle += @steer * 5 * dt
-    @vx += Math.sin(@angle) * @thrust * 300 * dt
-    @vy += -Math.cos(@angle) * @thrust * 300 * dt
-    @x += @vx * dt
-    @y += @vy * dt
+    @angle += @steer * dt * 0.01
+    @vx += Math.sin(@angle) * @thrust * dt * 0.01
+    @vy += -Math.cos(@angle) * @thrust * dt * 0.01
+    @x += @vx
+    @y += @vy
 
     # Dampen velocity a bit.
-    @vx *= 0.7**dt
-    @vy *= 0.7**dt
+    @vx *= 0.999**dt
+    @vy *= 0.999**dt
 
     if @fire && @fire_delay <= 0
-      vx = Math.sin(@angle) * 200
-      vy = -Math.cos(@angle) * 200
-      @bullets << [@x + vx * 0.05, @y + vy * 0.05, @vx + vx, @vy + vy]
-      @fire_delay = 0.1
+      vx = Math.sin(@angle) * 0.5
+      vy = -Math.cos(@angle) * 0.5
+      @bullets << [@x + vx * 10, @y + vy * 10, vx, vy]
+      @fire_delay = 100
     else
       @fire_delay -= dt
     end
@@ -67,7 +68,7 @@ class Ship
     end
   end
   
-  def render(gdi)
+  def render(gdi, alpha)
     @bullets.each do |bullet|
       gdi.draw_points_2d([
         bullet[0], bullet[1],
@@ -75,7 +76,8 @@ class Ship
       ])
     end
 
-    gdi.translate(@x, @y)
+    gdi.translate(@x + @vx * alpha, @y + @vy * alpha)
+    
     gdi.rotate_z(@angle.degrees)
     gdi.draw_polyline_2d([
       0.0, -13.0,
@@ -97,12 +99,14 @@ sim = lambda {|t, dt|
 }
 
 # Renderer.
-renderer = lambda {|sim|
+renderer = lambda {|sim, alpha|
+  #puts alpha
+
   # Clear and setup identity transform.
   gdi.clear
   gdi.trans0
 
-  ship.render(gdi)
+  ship.render(gdi, alpha)
  
   gdi.flip
 }
@@ -127,13 +131,14 @@ key_space = lambda {|event|
 key_other = lambda {|event|
   puts event.symbol
   if event.symbol == 27
+     # Clean up and exit.
      Uridium.destroy
      exit
   end  
 }
 
 # Run event loop.
-EventLoop.new(1.0 / EVENT_LOOP_FPS, sim, renderer,
+EventLoop.new(DT, sim, renderer,
   {:key => {
       276 => key_left,
       275 => key_right,
@@ -143,6 +148,3 @@ EventLoop.new(1.0 / EVENT_LOOP_FPS, sim, renderer,
     }
   }
 ).run
-
-# Clean up.
-Uridium.destroy
