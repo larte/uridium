@@ -18,7 +18,14 @@ extern "C"
 {
 
 static VALUE rb_mixer;
+static VALUE rb_sound;
 
+/*
+ * call-seq:
+ *         new(int frequency, int channels, int buffer) #=> Mixer
+ *
+ * Create a new mixer.
+ */
 VALUE init_mixer_impl(VALUE self, VALUE freq,
 		      VALUE chan, VALUE chunksize)
 {
@@ -37,10 +44,9 @@ VALUE init_mixer_impl(VALUE self, VALUE freq,
 
     return Qnil;
 }
-
-VALUE play_wav_impl(VALUE self, VALUE path)
+	
+VALUE init_sound_impl(VALUE self, VALUE path)
 {
-
 	Check_Type(path, T_STRING);
 	char *file = RSTRING_PTR(path);
 
@@ -49,33 +55,43 @@ VALUE play_wav_impl(VALUE self, VALUE path)
 	if(sound == NULL){
 		fprintf(stderr, "Unable to load wav file: %s\n", file);
 	}
-	int channel;
- 
-	channel = Mix_PlayChannel(-1, sound, 0);
+	rb_iv_set(self, "@chunk", Data_Wrap_Struct(rb_sound, 0, 0, sound));
+	return self;
+}
+/*
+ * no-doc
+ */
+VALUE play_sound_impl(VALUE self, VALUE samples, VALUE channelnum)
+{
+ 	Mix_Chunk *sound = NULL;
+	int num_samples = FIX2INT(samples);
+	int num_channel = FIX2INT(channelnum); 
+	Data_Get_Struct(rb_iv_get(self, "@chunk"), Mix_Chunk, sound);
+	int channel = Mix_PlayChannel(num_channel, sound, num_samples);
 	if(channel == -1) {
 	    fprintf(stderr, "Unable to play WAV file: %s\n", Mix_GetError());
-	}
-       
+	}	
 	return Qnil;
 }
 
-VALUE stop_play_wav_impl(VALUE self)
-{
-	printf("not implemented\n");
-}
 	
 void init_mixer()
 {
   rb_mixer = rb_define_class("Mixer", rb_cObject);
-	
-  rb_define_method(rb_mixer, "initialize",
+  rb_sound = rb_define_class("Sound", rb_cObject);
+  
+  rb_define_method(rb_mixer, "mixer_init_impl",
 		   (ruby_method*) &init_mixer_impl, 3);
-  rb_define_method(rb_mixer, "play_sound",
-		   (ruby_method*) &play_wav_impl, 1);
-  rb_define_method(rb_mixer, "stop_playing",
-		   (ruby_method*) &stop_play_wav_impl, 0);
 
+  // Sound class
+
+  rb_define_method(rb_sound, "initialize",
+		   (ruby_method*) &init_sound_impl, 1);
+
+  rb_define_method(rb_sound, "play_sound_impl",
+		   (ruby_method*) &play_sound_impl, 2);
 }
+	
 
 
 } // extern
