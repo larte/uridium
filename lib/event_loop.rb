@@ -34,8 +34,8 @@ class EventLoop
   end
   
   def run
-    t = 0.0
-    accumulator = 0.0
+    t = 0
+    accumulator = 0
     current_time = Clock.ticks
     
     while true
@@ -61,7 +61,7 @@ class EventLoop
       end
       
       # Render the simulation state with interpolation value alpha.
-      alpha = accumulator / @dt;
+      alpha = 1 - accumulator / @dt;
       @renderer.call(@sim, alpha)
 
       # Sleep for idle time.

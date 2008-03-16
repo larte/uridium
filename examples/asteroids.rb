@@ -7,13 +7,11 @@ require '../lib/uridium.rb'
 
 # Timestep, ms.
 DT = 10
-
-# Radians->degrees.
-class Numeric
-  def degrees
-    self * 180 / Math::PI
-  end
-end
+SCREEN_SIZE  = [640, 480]
+ACCELERATION = 0.0005
+ROT_SPEED    = 0.006
+DAMPENING    = 0.9995
+SAFE_AREA    = 20
 
 # Init.
 Uridium.init
@@ -22,63 +20,100 @@ Uridium.init
 font = Font.new("fonts/goodtimes.ttf", 60)
 
 # Open a display.
-display = Display.new("Asteroids", 640, 480, false, true)
+display = Display.new("Asteroids", SCREEN_SIZE[0], SCREEN_SIZE[1], false, true)
 display.open()
 gdi = display.gdi
 
-class Ship
-  attr_accessor :angle, :steer, :thrust, :fire
+# Radians->degrees.
+class Numeric
+  def degrees
+    self * 180 / Math::PI
+  end
+end
+
+class Vector
+  attr_accessor :x, :y
   
-  def initialize(x, y)
-    @x = x
-    @y = y
-    @vx = 0
-    @vy = 0
-    @angle = 0
-    @steer = 0
-    @thrust = 0
-    @fire = false
-    @fire_delay = 0
-    @bullets = []
+  def initialize(x = 0, y = 0)
+    set(x, y)
   end
 
-  def step(dt)
-    @angle += @steer * dt * 0.01
-    @vx += Math.sin(@angle) * @thrust * dt * 0.01
-    @vy += -Math.cos(@angle) * @thrust * dt * 0.01
-    @x += @vx
-    @y += @vy
+  def set(x, y)
+    @x = x
+    @y = y
+  end
+  
+  def zero
+    @x = 0
+    @y = 0
+  end
+  
+  def +(v)
+    Vector.new(@x + v.x, @y + v.y)
+  end
+  
+  def *(v)
+    Vector.new(@x * v, @y * v)
+  end
+end
 
-    # Dampen velocity a bit.
-    @vx *= 0.999**dt
-    @vy *= 0.999**dt
-
-    if @fire && @fire_delay <= 0
-      vx = Math.sin(@angle) * 0.5
-      vy = -Math.cos(@angle) * 0.5
-      @bullets << [@x + vx * 10, @y + vy * 10, vx, vy]
-      @fire_delay = 100
-    else
-      @fire_delay -= dt
-    end
+class GameObject
+  # Position, velocity, acceleration, rotation, angular velocity.
+  attr_accessor :p, :v, :a, :r, :av
+  
+  def initialize(x, y)
+    # Init sim properties.
+    @p = Vector.new(x, y)
+    @v = Vector.new
+    @a = Vector.new
+    @r = 0
+    @av = 0
     
-    @bullets.each do |bullet|
-      bullet[0] += bullet[2] * dt
-      bullet[1] += bullet[3] * dt
-    end
+    # Step velocity and angular velocity (used for interpolation).
+    @sv = Vector.new
+    @sav = 0
+  end  
+  
+  def step(dt)
+    @v += @a * dt
+    @sv = @v * dt
+    @p += @sv
+    @sav = @av * dt
+    @r += @sav
+    
+    # Limit to screen bounds (TODO: safe area).
+    @p.x %= SCREEN_SIZE[0]
+    @p.y %= SCREEN_SIZE[1]
   end
   
   def render(gdi, alpha)
-    @bullets.each do |bullet|
-      gdi.draw_points_2d([
-        bullet[0], bullet[1],
-        bullet[0] + 1, bullet[1] + 1
-      ])
+    gdi.translate(@p.x - @sv.x * alpha, @p.y - @sv.y * alpha)
+    gdi.rotate_z(@r.degrees - @sav.degrees * alpha)
+  end
+end
+
+class Ship < GameObject
+  attr_accessor :thrust, :fire
+  
+  def step(dt)
+    # Set accelaration.
+    if @thrust
+      @a.set(
+        Math.sin(@r) * ACCELERATION,
+        -Math.cos(@r) * ACCELERATION
+      )
+    else
+      @a.zero
     end
 
-    gdi.translate(@x + @vx * alpha, @y + @vy * alpha)
+    super
     
-    gdi.rotate_z(@angle.degrees)
+    # Dampen velocity.
+    @v *= DAMPENING ** dt
+  end
+  
+  def render(gdi, alpha)
+    super
     gdi.draw_polyline_2d([
       0.0, -13.0,
       10.0, 10.0,
@@ -89,12 +124,19 @@ class Ship
   end
 end
 
+# Create a ship.
 ship = Ship.new(*display.size.map {|d| d / 2})
-# samplerate, channels, buffer.
+objects = [ship]
+
+# Init mixer; samplerate, channels, buffer.
 mixer = Mixer.new(44100, 2, 1024)
+
 # Simulation.
 sim = lambda {|t, dt|
-  ship.step(dt)
+  # Simulate all objects
+  objects.each  do |object|
+    object.step(dt)
+  end
   return true
 }
 
@@ -112,15 +154,15 @@ renderer = lambda {|sim, alpha|
 }
 
 key_left = lambda {|event|
-  ship.steer = event.pressed ? -1 : 0
+  ship.av = event.pressed ? -ROT_SPEED : 0
 }
 
 key_right = lambda {|event|
-  ship.steer = event.pressed ? 1 : 0
+  ship.av = event.pressed ? ROT_SPEED : 0
 }
 
 key_up = lambda {|event|
-  ship.thrust = event.pressed ? 1 : 0
+  ship.thrust = event.pressed
 }
 
 key_space = lambda {|event|
@@ -129,7 +171,6 @@ key_space = lambda {|event|
 }
 
 key_other = lambda {|event|
-  puts event.symbol
   if event.symbol == 27
      # Clean up and exit.
      Uridium.destroy
