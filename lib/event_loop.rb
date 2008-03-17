@@ -63,9 +63,7 @@ class EventLoop
       @renderer.call(@sim, alpha)
 
       # Sleep for idle time.
-      puts "sleep"
-      Clock.sleep(1)
-      puts "afterz"
+      Clock.sleep(@idle_time)
     end
   end
   

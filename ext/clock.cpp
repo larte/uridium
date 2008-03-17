@@ -15,7 +15,7 @@ extern "C"
 
 static VALUE rb_clock;
 
-VALUE ticks(VALUE self)
+VALUE ticks_impl(VALUE self)
 {
   return INT2FIX(SDL_GetTicks());
 }
@@ -30,7 +30,7 @@ void init_clock()
 {
   rb_clock = rb_define_class("Clock", rb_cObject);
 	
-  rb_define_singleton_method(rb_clock, "ticks", (ruby_method*) &ticks, 0);
+  rb_define_singleton_method(rb_clock, "ticks", (ruby_method*) &ticks_impl, 0);
   rb_define_singleton_method(rb_clock, "sleep", (ruby_method*) &sleep_impl, 1);
 }
 
