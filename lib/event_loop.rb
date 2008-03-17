@@ -44,7 +44,6 @@ class EventLoop
       delta_time = new_time - current_time
       current_time = new_time
       accumulator += delta_time;
-      
       # While accumulated time left, step simulation with fixed dt.
       while accumulator >= @dt
         # Poll and dispatch events.
@@ -52,7 +51,6 @@ class EventLoop
           events = Event.poll_all(@event_mask)
           events.each {|event| dispatch_event(event)}
         end
-        
         return unless @sim.call(t, @dt)
 
         # Step in time.
@@ -61,11 +59,13 @@ class EventLoop
       end
       
       # Render the simulation state with interpolation value alpha.
-      alpha = 1 - accumulator / @dt;
+      alpha = 1 - accumulator.to_f / @dt;
       @renderer.call(@sim, alpha)
 
       # Sleep for idle time.
-      Clock.sleep(@idle_time)
+      puts "sleep"
+      Clock.sleep(1)
+      puts "afterz"
     end
   end
   

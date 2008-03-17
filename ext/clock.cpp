@@ -15,14 +15,16 @@ extern "C"
 
 static VALUE rb_clock;
 
-VALUE ticks(VALUE self)
+VALUE ticks()
 {
-  return UINT2NUM(SDL_GetTicks());
+  return INT2FIX(SDL_GetTicks());
 }
 
-VALUE sleep(VALUE self, VALUE time)
+VALUE sleep(VALUE time)
 {
-  SDL_Delay(NUM2UINT(time));
+      printf("sleep %d\n",FIX2UINT(time));
+      SDL_Delay(FIX2UINT(time));
+
   return Qnil;
 }
 

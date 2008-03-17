@@ -3,6 +3,7 @@ $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../ext'))
 
 require 'uridium'
 require 'event_loop'
+require '../lib/display.rb'
 
 # Init.
 Uridium.init

@@ -87,7 +87,8 @@ class GameObject
   end
   
   def render(gdi, alpha)
-    gdi.translate(@p.x - @sv.x * alpha, @p.y - @sv.y * alpha)
+    #gdi.translate(@p.x - @sv.x * alpha, @p.y - @sv.y * alpha)
+    gdi.translate(@p.x, @p.y)
     gdi.rotate_z(@r.degrees - @sav.degrees * alpha)
   end
 end
@@ -129,7 +130,8 @@ ship = Ship.new(*display.size.map {|d| d / 2})
 objects = [ship]
 
 # Init mixer; samplerate, channels, buffer.
-mixer = Mixer.new(44100, 2, 1024)
+#mixer = Mixer.new
+#laser = Sound.new("laser.wav")
 
 # Simulation.
 sim = lambda {|t, dt|
@@ -166,16 +168,16 @@ key_up = lambda {|event|
 }
 
 key_space = lambda {|event|
-  mixer.play_sound("laser.wav")
+  #laser.play
   ship.fire = event.pressed
 }
 
 key_other = lambda {|event|
   if event.symbol == 27
-     # Clean up and exit.
-     Uridium.destroy
-     exit
-  end  
+
+    Uridium.destroy
+    exit
+  end
 }
 
 # Run event loop.
