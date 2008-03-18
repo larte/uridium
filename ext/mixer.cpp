@@ -44,7 +44,14 @@ VALUE init_mixer_impl(VALUE self, VALUE freq,
 
     return Qnil;
 }
+
+// SOUND specific stuff
+static void destroy_sound(void *p)
+{
+    Mix_FreeChunk((Mix_Chunk *) p);    
+}
 	
+    
 VALUE init_sound_impl(VALUE self, VALUE path)
 {
 	Check_Type(path, T_STRING);
@@ -55,7 +62,8 @@ VALUE init_sound_impl(VALUE self, VALUE path)
 	if(sound == NULL){
 		fprintf(stderr, "Unable to load wav file: %s\n", file);
 	}
-	rb_iv_set(self, "@chunk", Data_Wrap_Struct(rb_sound, 0, 0, sound));
+	rb_iv_set(self, "@chunk", Data_Wrap_Struct(rb_sound, 0,
+                                                   destroy_sound, sound));
 	return self;
 }
 /*
@@ -74,7 +82,7 @@ VALUE play_sound_impl(VALUE self, VALUE samples, VALUE channelnum)
 	return Qnil;
 }
 
-	
+
 void init_mixer()
 {
   rb_mixer = rb_define_class("Mixer", rb_cObject);
