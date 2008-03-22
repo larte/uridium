@@ -141,6 +141,12 @@ VALUE gdi_draw_polygon_2d(VALUE self, VALUE vertices)
 
 VALUE gdi_draw_polyline_2d(VALUE self, VALUE vertices)
 {
+  /*
+  glEnable(GL_LINE_SMOOTH);
+  glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  */
   glColor3f(1, 1, 1);
 
   glBegin(GL_LINE_STRIP);

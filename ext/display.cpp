@@ -22,6 +22,11 @@ VALUE display_open_impl(VALUE self,
   char* sdl_name = STR2CSTR(rb_name);
   SDL_WM_SetCaption(sdl_name, sdl_name);
 
+  SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+  SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+  SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+  SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+  SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 16);
   SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
   screen = SDL_SetVideoMode(width, height, 32,

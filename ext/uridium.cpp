@@ -7,7 +7,7 @@ static VALUE rb_uridium;
 
 VALUE uridium_init_impl()
 {
-  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER) < 0)
+  if (SDL_Init(SDL_INIT_VIDEO) < 0)
   {
     printf("Unable to init SDL: %s\n", SDL_GetError());
     exit(1);
