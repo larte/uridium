@@ -50,6 +50,10 @@ class Vector
   def +(v)
     Vector.new(@x + v.x, @y + v.y)
   end
+
+  def -(v)
+    Vector.new(@x - v.x, @y - v.y)
+  end
   
   def *(v)
     Vector.new(@x * v, @y * v)
@@ -167,7 +171,7 @@ class Asteroid < GameObject
     super
 
     # Collide with ship.
-    if @p.distance(game.ship.p) < @radius
+    if @p.distance(game.ship.p) - 10 < @radius
       game.sounds[:boom].play
     end
   end
@@ -212,8 +216,40 @@ class Bullet < GameObject
   def self.render_all(bullets, gdi, alpha)
     # Render all bullets with a single sweep.
     gdi.trans0
-    gdi.draw_points_2d(bullets.map {|b| [b.p.x, b.p.y]}.flatten)
+    gdi.draw_points_2d(bullets.map {|b| [b.p.x, b.p.y]}.flatten, 1)
   end  
+end
+
+class Starfield
+  def initialize
+    @layers = []
+    3.times do
+      stars = []
+      150.times do
+        stars << Vector.new(rand(SCREEN_SIZE[0]), rand(SCREEN_SIZE[1]))
+      end
+      @layers << stars
+    end
+  end
+  
+  def step(game, t, dt)
+    # Move the starfield in parallax style.
+    @layers.each_with_index do |layer, i|
+      layer.each do |star|
+        star.x = (star.x - game.ship.v.x * (0.5 / (i + 1)) * dt) % SCREEN_SIZE[0]
+        star.y = (star.y - game.ship.v.y * (0.5 / (i + 1)) * dt) % SCREEN_SIZE[1]
+      end
+    end
+  end
+  
+  def render(gdi, alpha)
+    gdi.trans0
+    # Render starfield layers.
+    @layers.reverse.each_with_index do |layer, i|
+      gdi.draw_points_2d(layer.map {|s|
+        [s.x, s.y]}.flatten, 0.7 / (@layers.length - i))
+    end  
+  end
 end
 
 class Game
@@ -239,7 +275,8 @@ class Game
     @asteroids = ASTEROID_COUNT.times.map{|i| Asteroid.new(
       Vector.new(rand(SCREEN_SIZE[0]), rand(SCREEN_SIZE[1])))}
     @bullets = []
-
+    @starfield = Starfield.new
+    
     # Init mixer; samplerate, channels, buffer.
     mixer = Mixer.new
     @sounds = {
@@ -251,15 +288,13 @@ class Game
     sim = lambda {|t, dt|
       # Simulate all objects
       @ship.step(self, t, dt)
-
       @asteroids.each do |asteroid|
         asteroid.step(self, t, dt)
       end
-
+      @starfield.step(self, t, dt)
       @bullets.each do |bullet|
         bullet.step(self, t, dt)
       end
-
       return true
     }
 
@@ -271,8 +306,10 @@ class Game
       # Render all objects.
       @ship.render(gdi, alpha)
       @asteroids.each {|asteroid| asteroid.render(gdi, alpha)}
+      @starfield.render(gdi, alpha)
       Bullet.render_all(@bullets, gdi, alpha)
-    
+      
+      # Show buffer
       gdi.flip
     }
 

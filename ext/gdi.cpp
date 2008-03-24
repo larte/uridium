@@ -162,11 +162,10 @@ VALUE gdi_draw_polyline_2d(VALUE self, VALUE vertices)
   return Qnil;
 }
 
-VALUE gdi_draw_points_2d(VALUE self, VALUE vertices)
+VALUE gdi_draw_points_2d(VALUE self, VALUE vertices, VALUE brightness)
 {
-  glPointSize(1.0);
-
-  glColor3f(1, 1, 1);
+  float brt = NUM2DBL(brightness);
+  glColor3f(brt, brt, brt);
 
   glBegin(GL_POINTS);
   for(int i = 0; i < RARRAY(vertices)->len; i += 2)
@@ -203,7 +202,7 @@ void init_gdi()
     rb_define_method(rb_gdi, "draw_polygon_2d", (ruby_method*) &gdi_draw_polygon_2d, 1);
 
   rb_define_method(rb_gdi, "draw_polyline_2d", (ruby_method*) &gdi_draw_polyline_2d, 1);
-  rb_define_method(rb_gdi, "draw_points_2d", (ruby_method*) &gdi_draw_points_2d, 1);
+  rb_define_method(rb_gdi, "draw_points_2d", (ruby_method*) &gdi_draw_points_2d, 2);
 
   rb_define_method(rb_gdi, "draw_text", (ruby_method*) &gdi_draw_text, 2);
 }
