@@ -272,8 +272,11 @@ class Game
         
     # Create a ship.
     @ship = Ship.new(Vector.new(*display.size.map {|d| d / 2}))
-    @asteroids = ASTEROID_COUNT.times.map{|i| Asteroid.new(
-      Vector.new(rand(SCREEN_SIZE[0]), rand(SCREEN_SIZE[1])))}
+    @asteroids = []
+    ASTEROID_COUNT.times do |i| 
+      @asteroids[i] = Asteroid.new(
+      Vector.new(rand(SCREEN_SIZE[0]), rand(SCREEN_SIZE[1])))
+    end
     @bullets = []
     @starfield = Starfield.new
     
