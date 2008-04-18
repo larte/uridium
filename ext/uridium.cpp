@@ -24,7 +24,7 @@ VALUE uridium_destroy_impl()
 /* Module forward declarations. */
 void init_display();
 void init_gdi();
-void init_font();
+//void init_font();
 void init_event();
 void init_clock();
 void init_mixer();
@@ -37,7 +37,7 @@ void Init_uridium()
 
   init_display();
   init_gdi();
-  init_font();
+  //init_font();
   init_event();
   init_clock();
   init_mixer();

@@ -7,7 +7,12 @@
  */
 #include "uridium.h"
 #include <SDL/SDL.h>
-#include <GL/gl.h>
+#ifdef OS_DARWIN
+  #include <OpenGL/gl.h>
+  #include <OpenGL/glu.h>
+#else
+  #include <GL/gl.h>
+#endif
 
 extern "C"
 {

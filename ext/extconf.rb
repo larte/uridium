@@ -32,12 +32,35 @@ elsif RUBY_PLATFORM =~ /mingw32/
 
   headers << "SDL/SDL_mixer.h"
 
+elsif RUBY_PLATFORM =~ /darwin/
+  CONFIG['CC'] = 'g++'	
+  CONFIG['LDFLAGS'] += ' -framework GLU -framework OpenGl'
+  $CFLAGS += " -DOS_DARWIN  "
+  CONFIG['CFLAGS'] += " -framework OpenGl" 
+  $CFLAGS += " -framework OpenGl"
+#  $CPPFLAGS += " -framework GLUT -framerork OpenGL" 
+  $CFLAGS += 
+    " -L\"/System/Library/Frameworks/OpenGL.framework/Libraries\" -L/usr/X11R6/lib"  
+  CONFIG['CPPFLAGS'] += ' -I/usr/X11R6/include'	
+  CONFIG['LDFLAGS'] += ' -L/usr/X11R6/include'
+  c_libs << "SDL"
+#  c_libs << "GLU"
+  c_libs << "SDLmain"
+  c_libs << "SDL_mixer"
+  c_libs << "ftgl"
+  CONFIG['CFLAGS'] += 
+    "-lz -I/usr/X11R6/include/freetype2 -I/usr/local -I/usr/X11R6/include "
+  $DLDFLAGS += " -lz -I/usr/X11R6/include/freetype2 -I/usr/local -I/usr/X11R6/include -I/opt/local/include/freetype2 -framework OpenGL  "
+
+#  CONFIG.each{ |l|
+#    puts l.inspect
+#  }
 else
   raise "Unsupported platform: #{RUBY_PLATFORM}"
 end
 
 missing = [];
-c_libs.each{ |lib| 
+c_libs.each{ |lib|  
   if !have_library(lib)
     missing << lib
   end
