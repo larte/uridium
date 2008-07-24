@@ -1,13 +1,19 @@
 #include "uridium.h"
-#ifndef OS_UNIX
+#ifdef OS_WIN32
 #include <windows.h>
 #endif
 
+#ifndef OS_DARWIN
 #include <SDL/SDL.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glext.h>
-
+#else
+#include <SDL/SDL.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <OpenGL/glext.h>
+#endif
 extern "C"
 {
 static VALUE rb_display;
@@ -55,7 +61,7 @@ VALUE display_open_impl(VALUE self,
 
 VALUE display_sync_impl(VALUE self, VALUE interval)
 {
-#ifndef OS_UNIX
+#ifdef OS_WIN32
     typedef bool (APIENTRY *PFNWGLSWAPINTERVALFARPROC)(int);
     PFNWGLSWAPINTERVALFARPROC wglSwapIntervalEXT = 0;
     const char *extensions =(const char *) glGetString(GL_EXTENSIONS);

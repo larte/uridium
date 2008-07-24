@@ -261,7 +261,8 @@ class Game
     Uridium.init
 
     # Load a font.
-    font = Font.new("fonts/goodtimes.ttf", 60)
+
+#    font = Font.new("fonts/goodtimes.ttf", 60)
 
     # Open a display.
     display = Display.new("Asteroids",
