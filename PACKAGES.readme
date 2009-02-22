@@ -1,1 +1,5 @@
-libopengl-ruby
+On Debian, installing these packages should be enough:
+libftgl-dev
+libsdl1.2-dev
+libsdlmixer1.2-dev
+

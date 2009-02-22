@@ -1,0 +1,14 @@
+syntax: regexp
+
+
+(^|/)doc($|/)
+
+syntax: glob
+
+tags
+.DS_Store
+
+*.o
+*.log
+*.html
+
