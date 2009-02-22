@@ -18,7 +18,7 @@ ARCHLIB = "lib/#{::Config::CONFIG['arch']}"
 CLEAN.include ["ext/#{BIN}", ARCHLIB, 'ext/Makefile', '*.gem', '.config', 'pkg']
 RDOC_OPTS = ['--quiet', '--title', 'The Uridium Reference', '--main', 
              'README', '--inline-source']
-PKG_FILES = %w(History.txt Manifest.txt README.txt Rakefile) +
+PKG_FILES = %w(History.txt Manifest.txt README Rakefile) +
       Dir.glob("{bin,doc,test,lib}/**/*") + 
       Dir.glob("ext/*.{h,cpp,c,rb}") 
 
@@ -30,7 +30,7 @@ SPEC =
   s.platform = Gem::Platform::RUBY
   s.has_rdoc = true
   s.rdoc_options += RDOC_OPTS
-  s.extra_rdoc_files = ["README.txt", "History.txt", "Manifest.txt"]
+  s.extra_rdoc_files = ["README", "History.txt", "Manifest.txt"]
   s.description = s.summary = "A few bindings for SDL"
   s.author = "Lauri and Niko"
   s.email = "lauri.arte@gmail.com"
