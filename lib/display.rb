@@ -19,6 +19,7 @@ class Display
     sync_impl(@sync ? 1 : 0)
   end
   
+  # Create a new GDI context for this display.
   def gdi
     Gdi.new(self)
   end

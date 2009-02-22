@@ -71,9 +71,9 @@ esc_handler = lambda {|event|
 # (the "simulation" is updated once every 1/20th second)
 EventLoop.new(0.1, sim, renderer,
   {
-    :key => {27 => esc_handler, nil => key_handler},
-    :activation => activation_handler
-  }).run
-
+    :key => {
+        27 => esc_handler, 
+        nil => key_handler}
+  } ).run
 # Clean up
 Uridium.destroy

@@ -1,4 +1,4 @@
-= uridium
+== Uridium
 
 * http://uridium.virtualpope.com
 
@@ -6,13 +6,16 @@
 
 FIX (describe your package)
 
-== FEATURES/PROBLEMS:
+== FEATURES
 
-* FIX (list of features or problems)
+* Providers SDL Display, GDI and some drawing primitives to ruby, as well as 
+  an eventloop with separate simulation and rendering objects and a mixer to 
+  play sounds
 
 == SYNOPSIS:
 
-  FIX (code sample of usage)
+* Running asteroids.rb from examples/ will produce a classic 
+  shoot-em-up game and highlight almost all features of this lib.
 
 == REQUIREMENTS:
 
@@ -23,11 +26,16 @@ On linux you will need to install the following:
 * libftgl-dev
 * libsdl-mixer1.2-dev
 
-It will be sufficient to do 'apt-get install libftgl-dev libsdl-mixer1.2-dev libsdl-dev' on debina or ubuntu.
+* On debian/ubuntu it will be sufficient to do: 
+<b> $ apt-get install libftgl-dev libsdl-mixer1.2-dev libsdl-dev</b>
+
+* Will compile and run on Win32/MinGW, but no installation instructions are available at the moment.
+
+* Darwin support is planned, but not available at the moment.
 
 == INSTALL:
 
-* FIX (sudo gem install, anything else)
+* sudo gem install
 
 == LICENSE:
 

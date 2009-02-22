@@ -56,9 +56,9 @@ end
 Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_dir = 'doc/rdoc'
   rdoc.options += RDOC_OPTS
-  rdoc.main = "README.txt"
+  rdoc.main = "README"
   rdoc.rdoc_files.include("lib/*.rb", "ext/*.cpp")
-  rdoc.rdoc_files.add ['README.txt', 'Manifest.txt', 'History.txt']
+  rdoc.rdoc_files.add ['README', 'Manifest.txt', 'History.txt']
 end
 
 
@@ -72,6 +72,16 @@ namespace :test do
     end
   end
 end
+
+task :install do
+  sh %{rake package}
+  sh %{sudo gem install pkg/#{NAME}-#{VERS}}
+end
+
+task :uninstall => [:clean] do
+  sh %{sudo gem uninstall #{NAME}}
+end
+
 
 require 'find'
 module Find

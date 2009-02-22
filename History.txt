@@ -1,6 +1,323 @@
-=== 1.0.0 / 2009-02-22
+=== 0.1.64 / 2009-02-22
 
-* 1 major enhancement
+	* Using gemspec instead of hoe.
 
-  * Birthday!
 
+=== 0.1.63 / 2009-02-22
+
+	* Corrected to compile with ruby 1.9.1
+
+
+=== 0.1.62 / 2009-02-22
+
+	* Added hoe generation files + Rakefile
+
+
+=== 0.1.61 / 2008-07-24
+
+	* Compiles on DARWIN/mac os x 10.5, but dumps core.
+
+
+=== 0.1.60 / 2008-03-25
+
+	* [svn] 	moar like 1.8.6
+
+
+=== 0.1.59 / 2008-03-24
+
+	* [svn] - Added starfield background.
+
+
+=== 0.1.58 / 2008-03-22
+
+	* [svn] - Asteroids playable.
+
+
+=== 0.1.57 / 2008-03-18
+
+	* [svn] 	Added destroy_sound.
+
+
+=== 0.1.56 / 2008-03-17
+
+	* [svn] - Cleaned up code.
+
+
+=== 0.1.55 / 2008-03-17
+
+	* [svn] 	HOT TIP:
+
+
+=== 0.1.54 / 2008-03-17
+
+	* [svn] 	Partial fixes ( none ) to broken eventloop on unix.
+
+
+=== 0.1.53 / 2008-03-16
+
+	* [svn] 	Added Sound as separate class from mixer.
+
+
+=== 0.1.52 / 2008-03-16
+
+	* [svn] - Rewrote most of Asteroids.
+
+
+=== 0.1.51 / 2008-03-16
+
+	* [svn] - Added Clock class for high resolution timing purposes.
+
+
+=== 0.1.50 / 2008-03-10
+
+	* [svn] 	Fire dem LAZERS! added play_sound to mixer. No unallocation or
+
+
+=== 0.1.49 / 2008-03-07
+
+	* [svn] 	Added draw_polygon_2d
+
+
+=== 0.1.48 / 2008-03-07
+
+	* [svn] - Added simple Asteroids example (wip).
+
+
+=== 0.1.47 / 2008-02-26
+
+	* [svn] - Optimized event loop polling out if event mask is not set.
+
+
+=== 0.1.46 / 2008-02-26
+
+	* [svn] - Added event dispatching for key and activation events.
+
+
+=== 0.1.45 / 2008-02-24
+
+	* [svn] - Fixed super class of Mixer.
+
+
+=== 0.1.44 / 2008-02-24
+
+	* [svn] - Fixed Mingw build with SDL_mixer.
+
+
+=== 0.1.43 / 2008-02-24
+
+	* [svn] 	Initial ( empty ) sound mixer.
+
+
+=== 0.1.42 / 2008-02-23
+
+	* [svn] - Added ActivityEvent.
+
+
+=== 0.1.41 / 2008-02-23
+
+	* [svn] - Removed the obsolete list of objects to compile.
+
+
+=== 0.1.40 / 2008-02-23
+
+	* [svn] - Cleaned up code.
+
+
+=== 0.1.39 / 2008-02-23
+
+	* [svn] - Cleaned up.
+
+
+=== 0.1.38 / 2008-02-23
+
+	* [svn] - Made extern "C" declarations more consistent.
+
+
+=== 0.1.37 / 2008-02-22
+
+	* [svn] - Added Event class.
+
+
+=== 0.1.36 / 2008-02-20
+
+	* [svn] - Added simple Event class for polling events.
+
+
+=== 0.1.35 / 2008-02-20
+
+	* [svn] - Cleaned up code.
+
+
+=== 0.1.34 / 2008-02-20
+
+	* [svn] - Moved cpp class identifiers to uridium.h.
+
+
+=== 0.1.33 / 2008-02-20
+
+	* [svn] - Tried to fix $LOAD_PATH in examples.
+
+
+=== 0.1.32 / 2008-02-17
+
+	* [svn] - Cleaned up code.
+
+
+=== 0.1.31 / 2008-02-17
+
+	* [svn] - Made the logo movement FPS independent.
+
+
+=== 0.1.30 / 2008-02-17
+
+	* [svn] - Added trans0, a method that resets the transform.
+
+
+=== 0.1.29 / 2008-02-17
+
+	* [svn] - Fixed gdi/rotate_z.
+
+
+=== 0.1.28 / 2008-02-17
+
+	* [svn] - Changed Ruby 1.9 only lambda to 1.8 style.
+
+
+=== 0.1.27 / 2008-02-17
+
+	* [svn] - Added idle_time.
+
+
+=== 0.1.26 / 2008-02-16
+
+	* [svn] - Fixed gdi/clear.
+
+
+=== 0.1.25 / 2008-02-16
+
+	* [svn] - Added ext, lib and examples.
+
+
+=== 0.1.24 / 2008-02-12
+
+	* [svn] 	- added gdi.draw_line.
+
+
+=== 0.1.23 / 2008-02-12
+
+	* [svn] 	Testing rotate_z
+
+
+=== 0.1.22 / 2008-02-12
+
+	* [svn] 	-added more fun to highcaliber.
+
+
+=== 0.1.21 / 2008-02-12
+
+	* [svn] 	Added defines for ruby < 1.8.6
+
+
+=== 0.1.20 / 2008-02-12
+
+	* [svn] - Removed unnecessary files (Makefile, nbproject, uridium.so).
+
+
+=== 0.1.19 / 2008-02-12
+
+	* [svn] - Added a precompiled Freetype dll for easier testing.
+
+
+=== 0.1.18 / 2008-02-12
+
+	* [svn] - Fixed the shared linking flags for Mingw.
+
+
+=== 0.1.17 / 2008-02-12
+
+	* [svn] - Fixed font rendering.
+
+
+=== 0.1.16 / 2008-02-11
+
+	* [svn] - Added a simple gdi demo.
+
+
+=== 0.1.15 / 2008-02-11
+
+	* [svn] - Nuked build.cmd, as it was only useful for MS compilers.
+
+
+=== 0.1.14 / 2008-02-11
+
+	* [svn] - Made Uridium Mingw32 compatible.
+
+
+=== 0.1.13 / 2008-02-11
+
+	* [svn]
+
+
+=== 0.1.12 / 2008-02-11
+
+	* [svn] uh-oh
+
+
+=== 0.1.11 / 2008-02-11
+
+	* [svn] Pitää poistaa display.rb että tätä voi käyttää.
+
+
+=== 0.1.10 / 2008-02-04
+
+	* [svn]
+
+
+=== 0.1.9 / 2008-02-04
+
+	* [svn] Wrapped font to a struct
+
+
+=== 0.1.8 / 2008-01-23
+
+	* [svn] cpp implementation of fonts. Dumps core though.
+
+
+=== 0.1.7 / 2008-01-23
+
+	* [svn]
+
+
+=== 0.1.6 / 2008-01-23
+
+	* [svn]
+
+
+=== 0.1.5 / 2008-01-22
+
+	* [svn] Added c++ implementation of gdi
+
+
+=== 0.1.4 / 2008-01-22
+
+	* [svn] stuff++
+
+
+=== 0.1.3 / 2008-01-22
+
+	* [svn] Add CC change for extension.
+
+
+=== 0.1.2 / 2008-01-22
+
+	* [svn] extconf for linus.
+
+
+=== 0.1.1 / 2008-01-20
+
+	* [svn] Almost compiles in unix, a linker error though.
+
+
+=== 0.1.0 / 2008-01-19
+
+	* [svn] Initial import

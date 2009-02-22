@@ -24,7 +24,7 @@ static VALUE rb_sound;
  * call-seq:
  *         new(int frequency, int channels, int buffer) #=> Mixer
  *
- * Create a new mixer.
+ * Create a new mixer object.
  */
 VALUE init_mixer_impl(VALUE self, VALUE freq,
 		      VALUE chan, VALUE chunksize)

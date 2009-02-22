@@ -1,5 +1,17 @@
+# EventLoop:
+# Use this to trigger events and the simulation. See examples for usage.
+
 class EventLoop
 
+  # create a new eventloop with params:
+  #  * dt, the timeout used to run eventloop.
+  #  * sim, The simulation block to use with eventloop
+  #  * renderer, the rendering block to use with eventloop
+  #  * event_handlers, Hash of keys to trigger actions.
+  #  * idle time, optional
+  #
+  #  usage: see examples/asteroids.rb
+  #  
   def initialize(dt, sim, renderer, event_handlers = {}, idle_time = 10)
     @dt = dt
     @sim = sim
@@ -33,6 +45,7 @@ class EventLoop
     end
   end
   
+  # used to run the event loop
   def run
     t = 0
     accumulator = 0
