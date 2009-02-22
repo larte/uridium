@@ -1,6 +1,6 @@
 = uridium
 
-* FIX (url)
+* http://uridium.virtualpope.com
 
 == DESCRIPTION:
 
@@ -16,7 +16,14 @@ FIX (describe your package)
 
 == REQUIREMENTS:
 
-* FIX (list of requirements)
+On linux you will need to install the following:
+* libgl1-mesa-dev 
+* libglu1-mesa-dev
+* libsdl-dev
+* libftgl-dev
+* libsdl-mixer1.2-dev
+
+It will be sufficient to do 'apt-get install libftgl-dev libsdl-mixer1.2-dev libsdl-dev' on debina or ubuntu.
 
 == INSTALL:
 
