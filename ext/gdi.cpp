@@ -128,7 +128,13 @@ VALUE gdi_draw_polygon_2d(VALUE self, VALUE vertices)
 {
     glColor3f(1, 1, 1);
     glBegin( GL_POLYGON );
-    for(int i = 0; i < RARRAY(vertices)->len; i += 2)
+    int length;
+#ifndef RUBY_19
+    length = RARRAY(vertices)->len;
+#else
+    length = RARRAY_LEN(vertices);
+#endif
+    for(int i = 0; i < length; i += 2)
     {
 	    glVertex3f(
 		    NUM2DBL(rb_ary_entry(vertices, i)),
@@ -154,7 +160,13 @@ VALUE gdi_draw_polyline_2d(VALUE self, VALUE vertices)
   glColor3f(1, 1, 1);
 
   glBegin(GL_LINE_STRIP);
-  for(int i = 0; i < RARRAY(vertices)->len; i += 2)
+  int length;
+#ifndef RUBY_19
+    length = RARRAY(vertices)->len;
+#else
+    length = RARRAY_LEN(vertices);
+#endif
+  for(int i = 0; i < length; i += 2)
   {
     glVertex2f(
       NUM2DBL(rb_ary_entry(vertices, i)),
@@ -172,7 +184,14 @@ VALUE gdi_draw_points_2d(VALUE self, VALUE vertices, VALUE brightness)
   glColor3f(brt, brt, brt);
 
   glBegin(GL_POINTS);
-  for(int i = 0; i < RARRAY(vertices)->len; i += 2)
+  int length;
+#ifndef RUBY_19
+    length = RARRAY(vertices)->len;
+#else
+    length = RARRAY_LEN(vertices);
+#endif
+
+  for(int i = 0; i < length; i += 2)
   {
     glVertex2f(
       NUM2DBL(rb_ary_entry(vertices, i)),

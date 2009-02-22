@@ -4,6 +4,10 @@ c_libs = []
 cpp_libs = []
 headers = []
 
+if RUBY_VERSION =~ /1.9/ then
+  $CPPFLAGS += " -DRUBY_19"
+end
+
 #find frameworks on darwin
 def find_framework(name)
   location = ""
