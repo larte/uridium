@@ -7,6 +7,18 @@ require 'rake/testtask'
 require 'fileutils'
 include FileUtils
 
+
+require 'find'
+module Find
+  def match(*paths)
+    matched = []
+    find(*paths) { |path| matched << path if yield path }
+    return matched
+  end
+  module_function :match
+end	
+
+
 RbConfig = Config unless defined?(RbConfig)
 
 NAME = "uridium"
@@ -82,15 +94,27 @@ task :uninstall => [:clean] do
   sh %{sudo gem uninstall #{NAME}}
 end
 
-
-require 'find'
-module Find
-  def match(*paths)
-    matched = []
-    find(*paths) { |path| matched << path if yield path }
-    return matched
+desc "Update the History.txt file."
+task :update_history do 
+  require 'time'
+  require 'mercurial'
+  hg = Mercurial::WorkingDirectory.new
+  logs = hg.log
+  File.open("History.txt","w") do |f|
+    f.truncate(0)
+    logs.each do |l|
+      version = "0.1." + l.revision
+      f.puts "=== #{version} / #{Time.parse(l.date).strftime("%Y-%m-%d")}"
+      f.puts ""
+      f.puts "Changes:"
+      f.puts "\t* #{l.summary}"
+      f.puts "\n"
+    end
   end
-  module_function :match
-end	
+end
+
+
+
+
 
 # vim: syntax=Ruby
