@@ -77,7 +77,8 @@ VALUE play_sound_impl(VALUE self, VALUE samples, VALUE channelnum)
 	Data_Get_Struct(rb_iv_get(self, "@chunk"), Mix_Chunk, sound);
 	int channel = Mix_PlayChannel(num_channel, sound, num_samples);
 	if(channel == -1) {
-	    fprintf(stderr, "Unable to play WAV file: %s\n", Mix_GetError());
+            // 
+	    //fprintf(stderr, "Unable to play WAV file: %s\n", Mix_GetError());
 	}	
 	return Qnil;
 }

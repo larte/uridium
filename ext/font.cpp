@@ -29,11 +29,9 @@ VALUE font_initialize_impl(VALUE self, VALUE str, VALUE size)
  *   call-seq: clear() => #
  *
  */
-
-VALUE font_render_impl(VALUE self, VALUE text)
+VALUE font_render_impl(VALUE self, VALUE text, VALUE xcoord, VALUE ycoord)
 {
     char *str = RSTRING_PTR(text);
-    
     void *font;
     Data_Get_Struct(rb_iv_get(self, "@ftgl_font"), FTGLTextureFont, font);
     
@@ -41,7 +39,7 @@ VALUE font_render_impl(VALUE self, VALUE text)
     glEnable(GL_TEXTURE_2D);
     glColor3f(1.0, 1.0, 1.0);
     glScalef(1, -1, 1);
-    ((FTFont*) font)->Render(str);
+    ((FTFont*) font)->Render(str, -1, FTPoint(NUM2DBL(xcoord), NUM2DBL(ycoord)));
     glPopMatrix();
 
     return Qnil;
@@ -51,7 +49,7 @@ void init_font()
 {
   rb_font = rb_define_class("Font", rb_cObject);
   rb_define_method(rb_font, "initialize", (ruby_method*) &font_initialize_impl, 2);
-  rb_define_method(rb_font,"render",(ruby_method*) &font_render_impl, 1);
+  rb_define_method(rb_font,"render",(ruby_method*) &font_render_impl, 3);
 }
 
 } // extern

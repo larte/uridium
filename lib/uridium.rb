@@ -8,4 +8,5 @@ require 'uridium.so'
 require 'display'
 
 class Uridium
+  VERSION = "0.1.1"
 end

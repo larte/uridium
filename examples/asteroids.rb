@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(File.expand_path(File.dirname(__FILE__) + '/../ext'))
 require 'uridium'
 require 'event_loop'
 require 'mixer'
-require '../lib/uridium.rb'
+require 'uridium.rb'
 
 # Timestep, ms.
 DT = 10
@@ -13,7 +13,7 @@ SHIP_ACCEL          = 0.0005
 SHIP_ROT_SPEED      = 0.006
 SHIP_VEL_DAMP       = 0.9995
 SHIP_FIRING_DELAY   = 200
-ASTEROID_COUNT      = 5
+ASTEROID_COUNT      = 2 #5
 ASTEROID_SPEED      = 0.1
 ASTEROID_ROT_SPEED  = 0.005
 ASTEROID_VERTICES   = 20
@@ -22,6 +22,8 @@ ASTEROID_ROUGHNESS  = 0.4
 BULLET_SPEED        = 0.4
 BULLET_LIFETIME     = 1100
 SAFE_AREA           = 20
+MAX_LEVEL = 9
+LIVES = 3
 
 # Radians->degrees.
 class Numeric
@@ -134,12 +136,13 @@ class Ship < GameObject
         # 
         game.asteroids.delete(asteroid)
         game.sounds[:boom].play
-        puts "Colliding with asteroid!!"
+        game.update_score(-1000)
         if asteroid.radius > ASTEROID_RADIUS / 2.5
           3.times do
             game.asteroids << Asteroid.new(asteroid.p, asteroid.radius / 2)
           end
         end  
+        game.player_destroyed
         break
       end
     end
@@ -164,13 +167,13 @@ end
 class Asteroid < GameObject
   attr_reader :radius
   
-  def initialize(p, radius = ASTEROID_RADIUS)
+  def initialize(p, speed, radius = ASTEROID_RADIUS)
     super
     
     @radius = radius
     @v = Vector.new(
-      (rand(ASTEROID_SPEED * 1000) - ASTEROID_SPEED * 500) / 1000.0,
-      (rand(ASTEROID_SPEED * 1000) - ASTEROID_SPEED * 500) / 1000.0
+      (rand(speed * 1000) - speed * 500) / 1000.0,
+      (rand(speed * 1000) - speed * 500) / 1000.0
     )
     @av = (rand(ASTEROID_ROT_SPEED * 1000) - ASTEROID_ROT_SPEED * 500) / 1000.0
     
@@ -187,11 +190,6 @@ class Asteroid < GameObject
 
   def step(game, t, dt)
     super
-
-    # Collide with ship.
-    if @p.distance(game.ship.p) - 10 < @radius
-      game.sounds[:boom].play
-    end
   end
   
   def render(gdi, alpha)
@@ -217,12 +215,16 @@ class Bullet < GameObject
         game.sounds[:boom].play
         game.asteroids.delete(asteroid)
         game.bullets.delete(self)
-        
+        points = (50 - asteroid.radius)
+        game.update_score(points)
         if asteroid.radius > ASTEROID_RADIUS / 2.5
           3.times do
-            game.asteroids << Asteroid.new(asteroid.p, asteroid.radius / 2)
+            game.asteroids << Asteroid.new(asteroid.p, game.asteroid_speed, asteroid.radius / 2)
           end
-        end  
+        elsif game.asteroids.empty?
+          game.end_level
+          break
+        end
         break
       end
     end
@@ -252,10 +254,12 @@ class Starfield
   
   def step(game, t, dt)
     # Move the starfield in parallax style.
-    @layers.each_with_index do |layer, i|
-      layer.each do |star|
-        star.x = (star.x - game.ship.v.x * (0.5 / (i + 1)) * dt) % SCREEN_SIZE[0]
-        star.y = (star.y - game.ship.v.y * (0.5 / (i + 1)) * dt) % SCREEN_SIZE[1]
+    if game.ship
+      @layers.each_with_index do |layer, i|
+        layer.each do |star|
+          star.x = (star.x - game.ship.v.x * (0.5 / (i + 1)) * dt) % SCREEN_SIZE[0]
+          star.y = (star.y - game.ship.v.y * (0.5 / (i + 1)) * dt) % SCREEN_SIZE[1]
+        end
       end
     end
   end
@@ -272,32 +276,34 @@ end
 
 class Game
 
-  attr_reader :ship, :asteroids, :bullets, :sounds
-  
-  def run
+  attr_reader :ship, :asteroids, :bullets, :sounds, :level, :lives, :asteroid_speed
+
+
+
+  def initialize
     # Init.
     Uridium.init
-
+    @score = 0
+    @level = 1
+    @lives = LIVES
     # Load a font.
+    @info_counter = 0
+    @game_over = false
 
-#    font = Font.new("fonts/goodtimes.ttf", 60)
-
+    @asteroid_speed = ASTEROID_SPEED
+    @score_font = Font.new("fonts/goodtimes.ttf", 20)
+    @lives_font = Font.new("fonts/goodtimes.ttf", 20)
+    @info_font = Font.new("fonts/goodtimes.ttf", 40)
+    @info_text = nil
     # Open a display.
-    display = Display.new("Asteroids",
+    @display = Display.new("Asteroids",
       SCREEN_SIZE[0], SCREEN_SIZE[1], false, true)
     
-    display.open()
-    gdi = display.gdi
-        
-    # Create a ship.
-    @ship = Ship.new(Vector.new(*display.size.map {|d| d / 2}))
-    @asteroids = []
-    ASTEROID_COUNT.times do |i| 
-      @asteroids[i] = Asteroid.new(
-      Vector.new(rand(SCREEN_SIZE[0]), rand(SCREEN_SIZE[1])))
-    end
-    @bullets = []
+    @display.open()
+    @gdi = @display.gdi
+
     @starfield = Starfield.new
+
     
     # Init mixer; samplerate, channels, buffer.
     mixer = Mixer.new
@@ -306,10 +312,36 @@ class Game
       :boom => Sound.new("explosion.wav")
     }
 
+  end
+
+  def end_level
+    @ship = nil
+    @info_text = "LEVEL UP!"
+    @info_counter = 200
+    @level += 1
+    @asteroid_speed *= level
+    run
+  end
+
+  def run
+    # Create a ship.
+    if !@game_over
+      @ship = Ship.new(Vector.new(*@display.size.map {|d| d / 2}))
+      @asteroids = []
+
+
+      (@level*ASTEROID_COUNT).times do |i| 
+        @asteroids[i] = Asteroid.new(
+                     Vector.new(rand(SCREEN_SIZE[0]), rand(SCREEN_SIZE[1])), 
+                                     @asteroid_speed)
+      end
+      @bullets = []
+
+    end
     # Simulation.
     sim = lambda {|t, dt|
       # Simulate all objects
-      @ship.step(self, t, dt)
+      @ship.step(self, t, dt) if @ship
       @asteroids.each do |asteroid|
         asteroid.step(self, t, dt)
       end
@@ -323,32 +355,44 @@ class Game
     # Renderer.
     renderer = lambda {|sim, alpha|
       # Clear and setup identity transform.
-      gdi.clear
-
+      @gdi.clear
+      @score_font.render("Level: #{@level} Score: #{@score}", 10.0, -20.0)
+      @lives_font.render("<3 "*@lives, SCREEN_SIZE[0]-140.0 , -20.0)
+      if @info_text
+        @info_font.render(@info_text, 180.0, -(SCREEN_SIZE[1]/2.0) + 40) 
+        if !@game_over
+          @info_counter -= 1
+          @info_text = (@info_counter > 0) ? @info_text : nil
+        end
+      end
       # Render all objects.
-      @ship.render(gdi, alpha)
-      @asteroids.each {|asteroid| asteroid.render(gdi, alpha)}
-      @starfield.render(gdi, alpha)
-      Bullet.render_all(@bullets, gdi, alpha)
-      
+      @ship.render(@gdi, alpha) if @ship
+      @asteroids.each {|asteroid| asteroid.render(@gdi, alpha)}
+      @starfield.render(@gdi, alpha)
+      Bullet.render_all(@bullets, @gdi, alpha)
+
       # Show buffer
-      gdi.flip
+      @gdi.flip
     }
 
     key_left = lambda {|event|
-      @ship.av += event.pressed ? -SHIP_ROT_SPEED : SHIP_ROT_SPEED
+      if @ship
+        @ship.av += event.pressed ? -SHIP_ROT_SPEED : SHIP_ROT_SPEED
+      end
     }
 
     key_right = lambda {|event|
-      @ship.av += event.pressed ? SHIP_ROT_SPEED : -SHIP_ROT_SPEED
+      if @ship
+        @ship.av += event.pressed ? SHIP_ROT_SPEED : -SHIP_ROT_SPEED 
+      end
     }
 
     key_up = lambda {|event|
-      @ship.thrusting = event.pressed
+      @ship.thrusting = event.pressed if @ship
     }
 
     key_space = lambda {|event|
-      @ship.firing = event.pressed
+      @ship.firing = event.pressed if @ship
     }
 
     key_other = lambda {|event|
@@ -372,6 +416,22 @@ class Game
     ).run
   end
   
+  def player_destroyed
+    puts "That's it!"
+    @lives -= 1
+    @ship = nil
+    if @lives == 0
+      @info_text = "GAME OVER"
+      @game_over = true
+    end
+    run
+  end
+
+  def update_score(increment)
+    @score += increment
+    puts "Score: #{@score}"
+  end
+
 end
 
 # Run the game.
