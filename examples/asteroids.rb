@@ -124,9 +124,27 @@ class Ship < GameObject
       game.bullets << Bullet.new(@p, @v + d * BULLET_SPEED, t)
       @last_fired = t
     end
+
     
     super
     
+    # Collide with asteroids.
+    game.asteroids.each do |asteroid|
+      if @p.distance(asteroid.p) < asteroid.radius
+        # 
+        game.asteroids.delete(asteroid)
+        game.sounds[:boom].play
+        puts "Colliding with asteroid!!"
+        if asteroid.radius > ASTEROID_RADIUS / 2.5
+          3.times do
+            game.asteroids << Asteroid.new(asteroid.p, asteroid.radius / 2)
+          end
+        end  
+        break
+      end
+    end
+
+
     # Dampen velocity.
     @v *= SHIP_VEL_DAMP ** dt
   end
