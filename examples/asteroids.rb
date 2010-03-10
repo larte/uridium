@@ -7,7 +7,7 @@ require 'mixer'
 require 'uridium.rb'
 
 # Timestep, ms.
-DT = 10
+DT = 20
 SCREEN_SIZE         = [640, 480]
 SHIP_ACCEL          = 0.0005
 SHIP_ROT_SPEED      = 0.006
@@ -319,7 +319,7 @@ class Game
     @info_text = "LEVEL UP!"
     @info_counter = 200
     @level += 1
-    @asteroid_speed *= level
+    @asteroid_speed = (1+(level/MAX_LEVEL*1.0))*@asteroid_speed
     run
   end
 
@@ -359,7 +359,7 @@ class Game
       @score_font.render("Level: #{@level} Score: #{@score}", [10.0, -20.0])
       @lives_font.render("<3 "*@lives, [SCREEN_SIZE[0]-140.0 , -20.0])
       if @info_text
-        @info_font.render(@info_text, 180.0, [-(SCREEN_SIZE[1]/2.0) + 40]) 
+        @info_font.render(@info_text, [180.0, -(SCREEN_SIZE[1]/2.0) + 40]) 
         if !@game_over
           @info_counter -= 1
           @info_text = (@info_counter > 0) ? @info_text : nil
@@ -417,7 +417,6 @@ class Game
   end
   
   def player_destroyed
-    puts "That's it!"
     @lives -= 1
     @ship = nil
     @info_text = "BOOOOOOOM"
@@ -431,7 +430,6 @@ class Game
 
   def update_score(increment)
     @score += increment
-    puts "Score: #{@score}"
   end
 
 end

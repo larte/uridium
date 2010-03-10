@@ -44,6 +44,7 @@ font_initialize_impl(VALUE self, VALUE str, VALUE size)
 VALUE 
 font_render_impl(VALUE argc, VALUE *argv, VALUE self)
 {
+    char *str = RSTRING_PTR(argv[0]);
     FTPoint p;
     if (argc == 1) { // only the text
         p = FTPoint(0.0, 0.0);
@@ -55,7 +56,6 @@ font_render_impl(VALUE argc, VALUE *argv, VALUE self)
         p = FTPoint(x,y);
     }
 
-    char *str = RSTRING_PTR(argv[0]);
     void *font;
     Data_Get_Struct(rb_iv_get(self, "@ftgl_font"), FTGLTextureFont, font);
     
