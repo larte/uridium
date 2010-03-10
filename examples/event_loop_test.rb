@@ -32,15 +32,17 @@ logo = Logo.new
 # Simulation.
 sim = lambda {|t, dt|
   # Update logo attributes.
+  puts "sim"
   #logo.text = "Uridium (t: #{sprintf("%1.1f", t)}s, dt: #{sprintf("%1.2f", dt)}s)"
-  logo.rotation += dt * 2
-  logo.scale += dt * 0.1
+  #logo.rotation += dt * 2
+  #logo.scale += dt * 0.1
   return t < 10
 }
 
 # Renderer.
-renderer = lambda {|sim|
+renderer = lambda {|sim, alpha|
   # Clear and setup identity transform.
+  puts "render"
   gdi.clear
   gdi.trans0
   
@@ -49,7 +51,8 @@ renderer = lambda {|sim|
   gdi.scale(logo.scale)
 
   # Draw logo.
-  gdi.draw_text(font, logo.text)
+  font.render(logo.text, [10.0, -100.0])
+  # gdi.draw_text(font, logo.text)
   gdi.flip
 }
 
@@ -69,11 +72,12 @@ esc_handler = lambda {|event|
 
 # Create an event loop with sim dt=0.05s
 # (the "simulation" is updated once every 1/20th second)
-EventLoop.new(0.1, sim, renderer,
+EventLoop.new(0.2, sim, renderer,
   {
-    :key => {
-        27 => esc_handler, 
-        nil => key_handler}
+     :key => {
+                  27 => esc_handler, 
+                  nil => key_handler
+                }
   } ).run
 # Clean up
 Uridium.destroy

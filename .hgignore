@@ -1,15 +1,14 @@
 syntax: regexp
-
-
 (^|/)doc($|/)
 
 syntax: glob
 
+*~
+Makefile
 tags
 .DS_Store
 
 *.so
 *.o
 *.log
-*.html
 *.gem

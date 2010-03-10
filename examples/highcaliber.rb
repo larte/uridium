@@ -6,7 +6,7 @@ require 'uridium'
 puts $LOAD_PATH
 
 Uridium.init
-font = Font.new("fonts/base02.ttf", 72)
+font = Font.new("fonts/base02.ttf", 40)
 
 display = Display.new("High Caliber", 320, 200, false, false)
 display.open()
@@ -22,7 +22,7 @@ gdi = display.gdi
     gdi.draw_line([100+10*i,80+10*i],[150-10*i,80.0], [1.0,0,0])  
     gdi.draw_line([250,320-10*i],[170,i*30.0], [0,1.0,0])  
   else
-    font.render(text[0..i-20])
+    font.render(text[0..i-20], [10, -100])
     gdi.rotate_z(5)
   end
   gdi.flip

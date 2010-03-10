@@ -2,7 +2,7 @@
 require 'rake'
 require 'rake/clean'
 require 'rake/gempackagetask'
-require 'rake/rdoctask'
+require 'hanna/rdoctask'
 require 'rake/testtask'
 require 'fileutils'
 include FileUtils
@@ -28,8 +28,9 @@ PKG = "#{NAME}-#{VERS}"
 BIN = "*.{bundle,jar,so,obj,pdb,lib,def,exp,class}"
 ARCHLIB = "lib/#{::Config::CONFIG['arch']}"
 CLEAN.include ["ext/#{BIN}", ARCHLIB, 'ext/Makefile', '*.gem', '.config', 'pkg']
-RDOC_OPTS = ['--quiet', '--title', 'The Uridium Reference', '--main', 
-             'README', '--inline-source']
+RDOC_OPTS = ['--title', 'The Uridium Reference', '--main', 
+             'README', '--inline-source', '-D']
+
 PKG_FILES = %w(History.txt Manifest.txt README Rakefile) +
       Dir.glob("{bin,doc,test,lib}/**/*") + 
       Dir.glob("ext/*.{h,cpp,c,rb}") 

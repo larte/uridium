@@ -356,10 +356,10 @@ class Game
     renderer = lambda {|sim, alpha|
       # Clear and setup identity transform.
       @gdi.clear
-      @score_font.render("Level: #{@level} Score: #{@score}", 10.0, -20.0)
-      @lives_font.render("<3 "*@lives, SCREEN_SIZE[0]-140.0 , -20.0)
+      @score_font.render("Level: #{@level} Score: #{@score}", [10.0, -20.0])
+      @lives_font.render("<3 "*@lives, [SCREEN_SIZE[0]-140.0 , -20.0])
       if @info_text
-        @info_font.render(@info_text, 180.0, -(SCREEN_SIZE[1]/2.0) + 40) 
+        @info_font.render(@info_text, 180.0, [-(SCREEN_SIZE[1]/2.0) + 40]) 
         if !@game_over
           @info_counter -= 1
           @info_text = (@info_counter > 0) ? @info_text : nil
@@ -420,6 +420,8 @@ class Game
     puts "That's it!"
     @lives -= 1
     @ship = nil
+    @info_text = "BOOOOOOOM"
+    @info_counter = 100
     if @lives == 0
       @info_text = "GAME OVER"
       @game_over = true
