@@ -6,7 +6,7 @@
  *
  */
 #include "uridium.h"
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 #ifndef OS_DARWIN
 #include <GL/gl.h>
 #else
@@ -22,8 +22,9 @@ VALUE font_render_impl(VALUE self, VALUE text);
 
 VALUE gdi_init_impl(VALUE self, VALUE display)
 {
-    rb_iv_set(self, "@display", display);
-    return self;
+  LOG("GDI init");
+  rb_iv_set(self, "@display", display);
+  return self;
 }
 
 VALUE gdi_trans0_impl(VALUE self)
@@ -62,7 +63,7 @@ VALUE gdi_clear_impl(int argc, VALUE* argv, VALUE self)
      {
        color = NUM2UINT(rb_color);
      }
-     
+
      glClearColor(
         ((color & 0x00ff0000) >> 16) / 255.0f,
         ((color & 0x0000ff00) >> 8) / 255.0f,
@@ -79,8 +80,11 @@ VALUE gdi_clear_impl(int argc, VALUE* argv, VALUE self)
  */
 VALUE gdi_flip_impl(VALUE self)
 {
-    SDL_GL_SwapBuffers();
-    return Qnil;
+  VALUE display = rb_iv_get(self, "@display");
+  SDL_Window *screen;
+  Data_Get_Struct(rb_iv_get(display, "@sdl_surface"), SDL_Window, screen);
+  SDL_GL_SwapWindow(screen);
+  return Qnil;
 }
 
 /*
@@ -116,7 +120,7 @@ VALUE gdi_draw_line(VALUE self, VALUE coord1, VALUE coord2, VALUE colour)
 	glVertex2f(x1, y1);
 	glVertex2f(x2, y2);
 	glEnd();
-	
+
 	return Qnil;
 }
 
@@ -128,12 +132,8 @@ VALUE gdi_draw_polygon_2d(VALUE self, VALUE vertices)
 {
     glColor3f(1, 1, 1);
     glBegin( GL_POLYGON );
-    int length;
-#ifndef RUBY_19
-    length = RARRAY(vertices)->len;
-#else
+    long length;
     length = RARRAY_LEN(vertices);
-#endif
     for(int i = 0; i < length; i += 2)
     {
 	    glVertex3f(
@@ -147,7 +147,7 @@ VALUE gdi_draw_polygon_2d(VALUE self, VALUE vertices)
 
     return Qnil;
 }
-	
+
 
 VALUE gdi_draw_polyline_2d(VALUE self, VALUE vertices)
 {
@@ -160,12 +160,8 @@ VALUE gdi_draw_polyline_2d(VALUE self, VALUE vertices)
   glColor3f(1, 1, 1);
 
   glBegin(GL_LINE_STRIP);
-  int length;
-#ifndef RUBY_19
-    length = RARRAY(vertices)->len;
-#else
-    length = RARRAY_LEN(vertices);
-#endif
+  long length;
+  length = RARRAY_LEN(vertices);
   for(int i = 0; i < length; i += 2)
   {
     glVertex2f(
@@ -184,12 +180,8 @@ VALUE gdi_draw_points_2d(VALUE self, VALUE vertices, VALUE brightness)
   glColor3f(brt, brt, brt);
 
   glBegin(GL_POINTS);
-  int length;
-#ifndef RUBY_19
-    length = RARRAY(vertices)->len;
-#else
-    length = RARRAY_LEN(vertices);
-#endif
+  long length;
+  length = RARRAY_LEN(vertices);
 
   for(int i = 0; i < length; i += 2)
   {
@@ -212,7 +204,7 @@ VALUE gdi_draw_text(VALUE self, VALUE font, VALUE text)
 
 void init_gdi()
 {
-  rb_gdi = rb_define_class("Gdi", rb_cObject);
+  rb_gdi = rb_define_class_under(rb_uridium_module, "Gdi", rb_cObject);
   rb_define_method(rb_gdi, "initialize", (ruby_method*) &gdi_init_impl, 1);
   rb_define_method(rb_gdi, "trans0", (ruby_method*) &gdi_trans0_impl, 0);
   rb_define_method(rb_gdi, "translate", (ruby_method*) &gdi_translate_impl, 2);

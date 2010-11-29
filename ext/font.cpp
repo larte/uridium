@@ -14,16 +14,23 @@ Last modified: Wed Mar 10 09:57:22 2010 larte
 
 #include "uridium.h"
 
+#ifndef OS_DARWIN
 #include <GL/gl.h>
 #include <GL/glu.h>
+#else
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#endif
+
+
 #include <ft2build.h>
-#include <FTGL/ftgl.h> 
+#include <FTGL/ftgl.h>
 
 extern "C"
 {
 static VALUE rb_font;
 
-VALUE 
+VALUE
 font_initialize_impl(VALUE self, VALUE str, VALUE size)
 {
     rb_iv_set(self,"@path", str);
@@ -41,7 +48,7 @@ font_initialize_impl(VALUE self, VALUE str, VALUE size)
  *
  *   Renders the font with lower left corner at point x,y
  */
-VALUE 
+VALUE
 font_render_impl(VALUE argc, VALUE *argv, VALUE self)
 {
     char *str = RSTRING_PTR(argv[0]);
@@ -58,7 +65,7 @@ font_render_impl(VALUE argc, VALUE *argv, VALUE self)
 
     void *font;
     Data_Get_Struct(rb_iv_get(self, "@ftgl_font"), FTGLTextureFont, font);
-    
+
     glPushMatrix();
     glEnable(GL_TEXTURE_2D);
     glColor3f(1.0, 1.0, 1.0);
@@ -71,7 +78,7 @@ font_render_impl(VALUE argc, VALUE *argv, VALUE self)
 
 void init_font()
 {
-  rb_font = rb_define_class("Font", rb_cObject);
+  rb_font = rb_define_class_under(rb_uridium_module, "Font", rb_cObject);
   rb_define_method(rb_font, "initialize", (ruby_method*) &font_initialize_impl, 2);
   rb_define_method(rb_font,"render",(ruby_method*) &font_render_impl, -1);
 }

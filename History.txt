@@ -1,3 +1,9 @@
+=== 0.2.0 / 2018-02-14
+
+        * Migrate to SDL2
+        * Ruby > 2.0
+        * Support for Darwin
+
 === 0.1.64 / 2009-02-22
 
 	* Using gemspec instead of hoe.

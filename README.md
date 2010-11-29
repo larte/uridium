@@ -1,43 +1,71 @@
--*- markdown -*-
 # Uridium
 
-- www?
+## Description
 
-## DESCRIPTION:
+Some SDL2 bindings for Ruby
 
-FIX (describe your package)
+## FEATURES:
 
-## FEATURES
-
-- Providers SDL Display, GDI and some drawing primitives to ruby, as well as 
-  an eventloop with separate simulation and rendering objects and a mixer to 
+- Providers SDL Display, GDI and some drawing primitives to ruby, as well as
+  an eventloop with separate simulation and rendering objects and a mixer to
   play sounds
 
 ## SYNOPSIS:
 
-- Running asteroids.rb from examples/ will produce a classic 
+- Running asteroids.rb from lib/examples/ will produce a classic
   shoot-em-up game and highlight almost all features of this lib.
 
 ## REQUIREMENTS:
 
 On linux you will need to install the following:
-- libgl1-mesa-dev 
+- glu
 - libglu1-mesa-dev
-- libsdl-dev
-- libftgl-dev
-- libsdl-mixer1.2-dev
+- sdl2
+- sdl2_mixer
+- ftgl
 
-- On debian/ubuntu it will be sufficient to do: 
-   
-  $ apt-get install libftgl-dev libsdl-mixer1.2-dev libsdl-dev</b>
 
-- Will compile and run on Win32/MinGW, but no installation instructions are available at the moment.
+- On debian/ubuntu it will be sufficient to do:
 
-- Darwin is not available at the moment.
+    $ apt-get install libftgl-dev libsdl2-mixer-dev libsdl2-dev
+
+- On archlinux
+
+
+    $ pacman -S sdl2 sdl2_mixer ftgl freetype2
+
+- On debian/ubuntu it will be sufficient to do:
+
+    $ apt-get install libftgl-dev libsdl2-mixer-dev libsdl2-dev
+
+
+- On OSX
+
+    $ brew install sdl2_mixer sdl2 ftgl
 
 ## INSTALL:
 
-   gem install
+Bundle:
+     gem 'uridium', git: 'git://github.com/larte/uridium.git'
+
+then:
+
+     bundle install
+
+
+## Run example game
+
+
+     $ irb
+     2.4.3 :001> require 'uridium'
+     => true
+     2.4.3 :001> require 'examples/asteroids/game'
+     => true
+     2.4.3 :001> Asteroids::Game.new.run
+
+![Alt Text](asteroids.gif)
+
+
 
 # LICENSE:
 

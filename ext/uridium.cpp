@@ -1,5 +1,5 @@
 #include "uridium.h"
-#include <SDL/SDL.h>
+#include <SDL2/SDL.h>
 
 extern "C"
 {
@@ -24,24 +24,25 @@ VALUE uridium_destroy_impl()
 /* Module forward declarations. */
 void init_display();
 void init_gdi();
-#ifndef OS_DARWIN
+
 void init_font();
-#endif
+
 void init_event();
 void init_clock();
 void init_mixer();
-	
+
 void Init_uridium()
 {
-  rb_uridium = rb_define_class("Uridium", rb_cObject);
+
+  rb_uridium = rb_define_class_under(rb_uridium_module, "Uridium", rb_cObject);
   rb_define_singleton_method(rb_uridium, "init", (ruby_method*) &uridium_init_impl, 0);
   rb_define_singleton_method(rb_uridium, "destroy", (ruby_method*) &uridium_destroy_impl, 0);
 
   init_display();
   init_gdi();
-#ifndef OS_DARWIN
+
   init_font();
-#endif
+
   init_event();
   init_clock();
   init_mixer();

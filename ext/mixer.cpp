@@ -11,8 +11,8 @@ Last modified: Sun Feb 24 17:11:24 2008 lauri
 #include "uridium.h"
 
 
-#include <SDL/SDL.h>
-#include <SDL/SDL_mixer.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 
 extern "C"
 {
@@ -34,7 +34,7 @@ VALUE init_mixer_impl(VALUE self, VALUE freq,
 		// SDL Audio subsystem could not be started
 		printf("SDL audio subsystem could not be started");
 	}
-	
+
 	if( Mix_OpenAudio( NUM2INT(freq),
 			   MIX_DEFAULT_FORMAT,
 			   NUM2INT(chan),
@@ -48,10 +48,10 @@ VALUE init_mixer_impl(VALUE self, VALUE freq,
 // SOUND specific stuff
 static void destroy_sound(void *p)
 {
-    Mix_FreeChunk((Mix_Chunk *) p);    
+    Mix_FreeChunk((Mix_Chunk *) p);
 }
-	
-    
+
+
 VALUE init_sound_impl(VALUE self, VALUE path)
 {
 	Check_Type(path, T_STRING);
@@ -73,22 +73,22 @@ VALUE play_sound_impl(VALUE self, VALUE samples, VALUE channelnum)
 {
  	Mix_Chunk *sound = NULL;
 	int num_samples = FIX2INT(samples);
-	int num_channel = FIX2INT(channelnum); 
+	int num_channel = FIX2INT(channelnum);
 	Data_Get_Struct(rb_iv_get(self, "@chunk"), Mix_Chunk, sound);
 	int channel = Mix_PlayChannel(num_channel, sound, num_samples);
 	if(channel == -1) {
-            // 
+            //
 	    //fprintf(stderr, "Unable to play WAV file: %s\n", Mix_GetError());
-	}	
+	}
 	return Qnil;
 }
 
 
 void init_mixer()
 {
-  rb_mixer = rb_define_class("Mixer", rb_cObject);
-  rb_sound = rb_define_class("Sound", rb_cObject);
-  
+  rb_mixer = rb_define_class_under(rb_uridium_module, "Mixer", rb_cObject);
+  rb_sound = rb_define_class_under(rb_uridium_module, "Sound", rb_cObject);
+
   rb_define_method(rb_mixer, "mixer_init_impl",
 		   (ruby_method*) &init_mixer_impl, 3);
 
@@ -100,7 +100,7 @@ void init_mixer()
   rb_define_method(rb_sound, "play_sound_impl",
 		   (ruby_method*) &play_sound_impl, 2);
 }
-	
+
 
 
 } // extern
