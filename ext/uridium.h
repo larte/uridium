@@ -15,4 +15,8 @@ typedef VALUE (ruby_method)(...);
 #define RSTRING_PTR(x) RSTRING(x)->ptr
 #endif
 
+#ifndef STR2CSTR
+#define STR2CSTR(x) StringValuePtr(x)
+#endif			   
+
 #endif
