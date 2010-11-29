@@ -1,43 +1,44 @@
-== Uridium
+# Uridium
 
-* www?
+- www?
 
-== DESCRIPTION:
+## DESCRIPTION:
 
 FIX (describe your package)
 
-== FEATURES
+## FEATURES
 
-* Providers SDL Display, GDI and some drawing primitives to ruby, as well as 
+- Providers SDL Display, GDI and some drawing primitives to ruby, as well as 
   an eventloop with separate simulation and rendering objects and a mixer to 
   play sounds
 
-== SYNOPSIS:
+## SYNOPSIS:
 
-* Running asteroids.rb from examples/ will produce a classic 
+- Running asteroids.rb from examples/ will produce a classic 
   shoot-em-up game and highlight almost all features of this lib.
 
-== REQUIREMENTS:
+## REQUIREMENTS:
 
 On linux you will need to install the following:
-* libgl1-mesa-dev 
-* libglu1-mesa-dev
-* libsdl-dev
-* libftgl-dev
-* libsdl-mixer1.2-dev
+- libgl1-mesa-dev 
+- libglu1-mesa-dev
+- libsdl-dev
+- libftgl-dev
+- libsdl-mixer1.2-dev
 
-* On debian/ubuntu it will be sufficient to do: 
-<b> $ apt-get install libftgl-dev libsdl-mixer1.2-dev libsdl-dev</b>
+- On debian/ubuntu it will be sufficient to do: 
+   
+  $ apt-get install libftgl-dev libsdl-mixer1.2-dev libsdl-dev</b>
 
-* Will compile and run on Win32/MinGW, but no installation instructions are available at the moment.
+- Will compile and run on Win32/MinGW, but no installation instructions are available at the moment.
 
-* Darwin support is planned, but not available at the moment.
+- Darwin is not available at the moment.
 
-== INSTALL:
+## INSTALL:
 
-* sudo gem install
+   gem install
 
-== LICENSE:
+# LICENSE:
 
 (The MIT License)
 

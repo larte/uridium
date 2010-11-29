@@ -29,9 +29,9 @@ BIN = "*.{bundle,jar,so,obj,pdb,lib,def,exp,class}"
 ARCHLIB = "lib/#{::Config::CONFIG['arch']}"
 CLEAN.include ["ext/#{BIN}", ARCHLIB, 'ext/Makefile', '*.gem', '.config', 'pkg']
 RDOC_OPTS = ['--title', 'The Uridium Reference', '--main', 
-             'README', '--inline-source', '-D']
+             'Readme.md', '--inline-source', '-D']
 
-PKG_FILES = %w(History.txt Manifest.txt README Rakefile) +
+PKG_FILES = %w(History.txt Manifest.txt Readme.md Rakefile) +
       Dir.glob("{bin,doc,test,lib}/**/*") + 
       Dir.glob("ext/*.{h,cpp,c,rb}") 
 
@@ -43,7 +43,7 @@ SPEC =
   s.platform = Gem::Platform::RUBY
   s.has_rdoc = true
   s.rdoc_options += RDOC_OPTS
-  s.extra_rdoc_files = ["README", "History.txt", "Manifest.txt"]
+  s.extra_rdoc_files = ["Readme.md", "History.txt", "Manifest.txt"]
   s.description = s.summary = "A few bindings for SDL"
   s.author = "Lauri and Niko"
   s.email = "lauri.arte@gmail.com"
@@ -69,9 +69,9 @@ end
 Rake::RDocTask.new do |rdoc|
   rdoc.rdoc_dir = 'doc/rdoc'
   rdoc.options += RDOC_OPTS
-  rdoc.main = "README"
+  rdoc.main = "Readme.md"
   rdoc.rdoc_files.include("lib/*.rb", "ext/*.cpp")
-  rdoc.rdoc_files.add ['README', 'Manifest.txt', 'History.txt']
+  rdoc.rdoc_files.add ['Readme.md', 'Manifest.txt', 'History.txt']
 end
 
 
