@@ -6,18 +6,16 @@ Some SDL2 bindings for Ruby
 
 ## FEATURES:
 
-- Providers SDL Display, GDI and some drawing primitives to ruby, as well as
-  an eventloop with separate simulation and rendering objects and a mixer to
-  play sounds
+Providers SDL Display, GDI and some drawing primitives to ruby, as well as  an eventloop with separate simulation and rendering objects and a mixer to play sounds. Only keyboard events are supported at the moment.
 
 ## SYNOPSIS:
 
-- Running asteroids.rb from lib/examples/ will produce a classic
-  shoot-em-up game and highlight almost all features of this lib.
+Running asteroids.rb from lib/examples/ will produce a classic shoot-em-up game and highlight almost all features of this lib.
 
 ## REQUIREMENTS:
 
-On linux you will need to install the following:
+### Needed libraries
+
 - glu
 - libglu1-mesa-dev
 - sdl2
@@ -25,27 +23,23 @@ On linux you will need to install the following:
 - ftgl
 
 
-- On debian/ubuntu it will be sufficient to do:
-
-    $ apt-get install libftgl-dev libsdl2-mixer-dev libsdl2-dev
-
-- On archlinux
-
-
-    $ pacman -S sdl2 sdl2_mixer ftgl freetype2
-
-- On debian/ubuntu it will be sufficient to do:
+### Debian
 
     $ apt-get install libftgl-dev libsdl2-mixer-dev libsdl2-dev
 
 
-- On OSX
+### Archlinux
 
-    $ brew install sdl2_mixer sdl2 ftgl
+     $ pacman -S sdl2 sdl2_mixer ftgl freetype2
+
+### OSX
+
+     $ brew install sdl2_mixer sdl2 ftgl
 
 ## INSTALL:
 
 Bundle:
+
      gem 'uridium', git: 'git://github.com/larte/uridium.git'
 
 then:
