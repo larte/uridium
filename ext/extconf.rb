@@ -8,10 +8,12 @@ HEADERS = { 'SDL2/SDL_mixer.h' => ['/usr', '/usr/local'],
            ['/usr/include/freetype2', '/usr/local/include/freetype2'] }.freeze
 
 # Check libs
+missing = []
 (COMMON_LIBS + NIX_LIBS).each do |l|
-  have_library(l)
-  find_library(l, nil, '/usr')
+  missing << l unless have_library(l)
 end
+
+abort "can't find #{missing.join(", ")} libs" unless missing.empty?
 
 HEADERS.each do |header, paths|
   find_header(header, *paths)
