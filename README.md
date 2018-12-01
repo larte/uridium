@@ -10,7 +10,9 @@ Providers SDL Display, GDI and some drawing primitives to ruby, as well as  an e
 
 ## SYNOPSIS:
 
-Running asteroids.rb from lib/examples/ will produce a classic shoot-em-up game and highlight almost all features of this lib.
+Running asteroids.rb from lib/uridium-examples/ will produce a classic shoot-em-up game and highlight almost all features of this lib.
+
+![Alt Text](asteroids.gif)
 
 ## REQUIREMENTS:
 
@@ -38,6 +40,19 @@ Running asteroids.rb from lib/examples/ will produce a classic shoot-em-up game 
 
 ## INSTALL:
 
+### From sources
+
+clone this repo. And compile C extension:
+
+    cd ext; ruby extconf.rb; make
+
+Run:
+
+    cd ..; ruby -I/.lib -I./ext lib/uridium-examples/asteroids.rb
+
+
+### With gem
+
 Bundle:
 
      gem 'uridium', git: 'git://github.com/larte/uridium.git'
@@ -47,17 +62,17 @@ then:
      bundle install
 
 
-## Run example game
+Run example game
 
 
      $ irb
      2.4.3 :001> require 'uridium'
      => true
-     2.4.3 :001> require 'examples/asteroids/game'
+     2.4.3 :001> require 'uridium-examples/asteroids/game'
      => true
      2.4.3 :001> Asteroids::Game.new.run
 
-![Alt Text](asteroids.gif)
+
 
 
 
